@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+  <title th:text="#{welcome.title}"></title>
+</head>
+<body>
+<div layout:fragment="content">
+  <span sec:authentication="name">Bob</span>
+</div>
+</body>
+</html>
