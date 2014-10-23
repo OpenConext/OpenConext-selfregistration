@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+</head>
+<body>
+<div>
+  <form action="#">
+    <div th:fragment="textfield (fieldName)">
+      <input type="text" th:field="*{__${fieldName}__}" class="small" th:errorclass="field-error"/>
+      <ul th:if="${#fields.hasErrors('__${fieldName}__')}">
+        <li th:each="err : ${#fields.errors('__${fieldName}__')}" th:text="${err}" />
+      </ul>
+    </div>
+  </form>
+</div>
+</body>
+</html>

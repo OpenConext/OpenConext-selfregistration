@@ -44,6 +44,7 @@ public class Application extends WebMvcConfigurerAdapter {
       filter.setAuthenticationManager(authenticationManagerBean());
       http.addFilterBefore(filter, AbstractPreAuthenticatedProcessingFilter.class);
       http.authorizeRequests().anyRequest().hasAnyRole("USER");
+      http.csrf();
     }
 
     @Override
