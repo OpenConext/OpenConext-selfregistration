@@ -5,7 +5,4 @@
 .idea
 *.iml
 target
-rebel.xml
-coin-api-external-groups/bin/
-dependency.tree
-*JanusRestClientTestIntegration.java
+.sass-cache

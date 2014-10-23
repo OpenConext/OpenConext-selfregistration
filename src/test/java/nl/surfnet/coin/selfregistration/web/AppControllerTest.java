@@ -22,19 +22,20 @@ public class AppControllerTest {
   }
 
   @Test
-  public void testGetsAnEmptyForm() throws Exception {
+  public void testShowsExistingServiceProvidersForIdp() throws Exception {
     mockMvc
       .perform(get("/"))
-      .andExpect(model().attributeExists("serviceProvider"));
+      .andExpect(model().attributeExists("serviceProviders"));
+
   }
 
   @Test
-  public void testGetsAnEmptyFormOnGetServiceProvider() throws Exception {
+  public void testGetsAnEmptyForm() throws Exception {
     mockMvc
       .perform(get("/service-provider"))
       .andExpect(model().attributeExists("serviceProvider"));
-
   }
+
 
   @Test
   public void testPostToServiceProvider() throws Exception {

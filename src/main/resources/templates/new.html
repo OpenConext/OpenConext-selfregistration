@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+  <title th:text="#{welcome.title}"></title>
+</head>
+<body>
+<div layout:fragment="content">
+  <div class="l-mini">
+
+    <div class="mod-newserviceprovider">
+
+      <h1 th:text="#{new.title}"></h1>
+
+      <div class="serviceprovider-container">
+        <form name="add-service-provider" th:action="@{/service-provider}" th:object="${serviceProvider}" method="post">
+          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+          <div th:include="forms :: textfield(fieldName=entityId)"/>
+
+          <input type="submit" class="c-button" value="Save"/>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
       xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
       layout:decorator="layout">
 <head>
@@ -8,13 +7,31 @@
 </head>
 <body>
 <div layout:fragment="content">
-  <span sec:authentication="name">Bob</span>
-  <form name="add-service-provider" th:action="@{/service-provider}" th:object="${serviceProvider}" method="post">
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-    <div th:include="forms :: textfield(fieldName=entityId)"/>
-    <div th:include="forms :: textfield(fieldName=entityId)"/>
-  </form>
+  <div class="l-mini">
 
+    <div class="mod-overview">
+      <a href="/service-provider" class="c-button addserviceprovider">Add service provider</a>
+      <h1 th:text="#{index.title}"></h1>
+
+      <p th:text="#{index.subtitle}">
+        Hier een lange text.
+      </p>
+      <br />
+      <table>
+        <tbody>
+          <tr>
+            <td class="percent_20">LOGO</td>
+            <td class="percent_80">My twitter app</td>
+          </tr>
+          <tr>
+            <td class="percent_20">LOGO</td>
+            <td class="percent_80">My twitter app</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
 </div>
 </body>
 </html>

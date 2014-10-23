@@ -4,6 +4,19 @@ To run locally:
 
     mvn spring-boot:run -Drun.jvmArguments="-Dspring.profiles.active=dev"
 
+Or use the shortcut:
+
+    ./start.sh
+
+## Building
+
+We use sass to ease the pain of CSS development. You can best install sass using ruby. Best is to manage your rubies
+with [rbenv](https://github.com/sstephenson/rbenv). After installing rbenv ```cd``` into this directory and run:
+
+    gem install sass
+
+    sass --watch src/main/sass/application.sass:src/main/resources/static/application.css
+
 ## ServiceRegistry
 
 It uses the API on serviceregistry to add new services. See

@@ -9,22 +9,29 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 
+import java.util.ArrayList;
+
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
 public class AppController {
 
-  @RequestMapping(value = {"/", "/service-provider"}, method = GET)
+  @RequestMapping(value = "/", method = GET)
+  public ModelAndView index() {
+    return new ModelAndView("index", "serviceProviders", new ArrayList<ServiceProvider>());
+  }
+
+  @RequestMapping(value = "/service-provider", method = GET)
   public ModelAndView home(ServiceProvider serviceProvider) {
-    return new ModelAndView("index");
+    return new ModelAndView("new");
   }
 
   @RequestMapping(value = "/service-provider", method = POST)
   public String post(@Valid ServiceProvider serviceProvider, BindingResult bindingResult) {
     if (bindingResult.hasErrors()) {
       System.out.println(bindingResult);
-      return "index";
+      return "new";
     } else {
       System.out.println(serviceProvider);
     }
