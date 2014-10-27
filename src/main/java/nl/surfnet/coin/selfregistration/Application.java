@@ -4,8 +4,10 @@ package nl.surfnet.coin.selfregistration;
 import nl.surfnet.coin.selfregistration.web.shibboleth.ShibbolethPreAuthenticatedProcessingFilter;
 import nl.surfnet.coin.selfregistration.web.shibboleth.ShibbolethUserDetailService;
 import nl.surfnet.coin.selfregistration.web.shibboleth.mock.MockShibbolethFilter;
+import nl.surfnet.coin.stoker.Stoker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
@@ -13,6 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.io.Resource;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -21,6 +24,8 @@ import org.springframework.security.web.authentication.preauth.AbstractPreAuthen
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import java.io.IOException;
+
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan("nl.surfnet.coin.selfregistration")
@@ -28,6 +33,11 @@ public class Application extends WebMvcConfigurerAdapter {
 
   public static void main(String[] args) {
     new SpringApplicationBuilder(Application.class).run(args);
+  }
+
+  @Bean
+  public Stoker stoker(@Value("${stoker.location}")Resource location) throws IOException {
+    return new Stoker(location);
   }
 
 

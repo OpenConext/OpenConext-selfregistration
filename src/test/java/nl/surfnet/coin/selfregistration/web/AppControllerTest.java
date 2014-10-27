@@ -22,14 +22,6 @@ public class AppControllerTest {
   }
 
   @Test
-  public void testShowsExistingServiceProvidersForIdp() throws Exception {
-    mockMvc
-      .perform(get("/"))
-      .andExpect(model().attributeExists("serviceProviders"));
-
-  }
-
-  @Test
   public void testGetsAnEmptyForm() throws Exception {
     mockMvc
       .perform(get("/service-provider"))

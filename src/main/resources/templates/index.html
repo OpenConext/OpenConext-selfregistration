@@ -9,27 +9,30 @@
 <div layout:fragment="content">
   <div class="l-mini">
 
-    <div class="mod-overview">
-      <a href="/service-provider" class="c-button addserviceprovider">Add service provider</a>
+    <div class="mod-overview-search">
       <h1 th:text="#{index.title}"></h1>
 
-      <p th:text="#{index.subtitle}">
-        Hier een lange text.
-      </p>
-      <br />
-      <table>
+      <div class="search">
+        <fieldset>
+          <i className="fa fa-search"/>
+          <input id="search-service-providers" type="search" th:placeholder="#{index.search.placeholder}" data-url="/shib/service-providers.json"/>
+
+          <button type="submit" th:text="#{index.search.button}"></button>
+        </fieldset>
+      </div>
+
+
+    </div>
+
+    <div class="mod-overview-list">
+      <table id="search-results">
         <tbody>
-          <tr>
-            <td class="percent_20">LOGO</td>
-            <td class="percent_80">My twitter app</td>
-          </tr>
-          <tr>
-            <td class="percent_20">LOGO</td>
-            <td class="percent_80">My twitter app</td>
-          </tr>
+        <tr th:each="sp : ${serviceProviders}" class="hidden" th:attr="data-sp-name=@{${sp.displayNameEn}}">
+          <td th:text="${sp.displayNameEn}">Name</td>
+          <td th:text="${sp.entityId}">SP Entity ID</td>
+        </tr>
         </tbody>
       </table>
-
     </div>
   </div>
 </div>

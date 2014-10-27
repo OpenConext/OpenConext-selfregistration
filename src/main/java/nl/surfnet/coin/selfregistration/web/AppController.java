@@ -17,11 +17,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @Controller
 public class AppController {
 
-  @RequestMapping(value = "/", method = GET)
-  public ModelAndView index() {
-    return new ModelAndView("index", "serviceProviders", new ArrayList<ServiceProvider>());
-  }
-
   @RequestMapping(value = "/service-provider", method = GET)
   public ModelAndView home(ServiceProvider serviceProvider) {
     return new ModelAndView("new");

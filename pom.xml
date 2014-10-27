@@ -114,11 +114,16 @@
       <artifactId>thymeleaf-extras-springsecurity3</artifactId>
       <version>2.1.1.RELEASE</version>
     </dependency>
-      <dependency>
-          <groupId>joda-time</groupId>
-          <artifactId>joda-time</artifactId>
-          <version>2.3</version>
-      </dependency>
+    <dependency>
+      <groupId>joda-time</groupId>
+      <artifactId>joda-time</artifactId>
+      <version>2.3</version>
+    </dependency>
+    <dependency>
+      <groupId>org.surfnet.coin</groupId>
+      <artifactId>stoker</artifactId>
+      <version>0.0.1</version>
+    </dependency>
   </dependencies>
 
   <build>
