@@ -5,5 +5,9 @@
     td
       word-break: break-all
       width: 50%
-    tr.hidden
-      display: none
+    tr
+      &:hover
+        background-color: $blue
+        cursor: pointer
+      &.hidden
+        display: none

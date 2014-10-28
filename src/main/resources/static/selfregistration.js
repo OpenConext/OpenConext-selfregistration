@@ -9,6 +9,9 @@ $(function() {
         $tr.addClass("hidden");
       }
     });
+  });
 
+  $("#search-results tr").on("click", function() {
+    $(this).find("form").submit();
   });
 });

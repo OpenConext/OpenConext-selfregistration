@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -50,4 +51,8 @@ public class InviteController {
     return new ModelAndView("index", "serviceProviders", new ServiceProviderOrderer(stoker.getEduGainServiceProviders()).ordered());
   }
 
+  @RequestMapping(value="/invite",method = GET)
+  public ModelAndView invite(@RequestParam("spEntityId") String spEntityId) {
+    return new ModelAndView("invite", "serviceProvider", stoker.getEduGainServiceProvider(spEntityId));
+  }
 }

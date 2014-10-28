@@ -36,8 +36,8 @@ public class Application extends WebMvcConfigurerAdapter {
   }
 
   @Bean
-  public Stoker stoker(@Value("${stoker.location}")Resource location) throws IOException {
-    return new Stoker(location);
+  public Stoker stoker(@Value("${stoker.metaDataLocation}") Resource metaDataFileLocation, @Value("${stoker.location}") Resource stokerLocation) throws Exception {
+    return new Stoker(metaDataFileLocation, stokerLocation);
   }
 
 

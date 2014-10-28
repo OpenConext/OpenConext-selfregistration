@@ -29,7 +29,11 @@
         <tbody>
         <tr th:each="sp : ${serviceProviders}" class="hidden" th:attr="data-sp-name=@{${sp.displayNameEn}}">
           <td th:text="${sp.displayNameEn}">Name</td>
-          <td th:text="${sp.entityId}">SP Entity ID</td>
+          <td><span th:text="${sp.entityId}">SP Entity ID</span>
+            <form th:action="@{/fedops/invite}" method="get">
+              <input type="hidden" name="spEntityId" th:value="${sp.entityId}"/>
+            </form>
+          </td>
         </tr>
         </tbody>
       </table>
