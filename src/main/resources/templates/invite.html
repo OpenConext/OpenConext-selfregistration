@@ -14,10 +14,31 @@
       <h1 th:text="#{invite.title}"></h1>
 
       <div>
-        <ul>
-          <li th:each="contactPerson : ${serviceProvider.contactPersons}" th:text="${contactPerson.fullName}"></li>
-        </ul>
+        <table>
+          <thead>
+            <tr>
+              <th th:text="#{invite.name}">
+                Name
+              </th>
+              <th th:text="#{invite.email}">
+                Email
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="contactPerson : ${serviceProvider.contactPersons}">
+              <td th:text="${contactPerson.fullName}">
+
+              </td>
+              <td th:text="${contactPerson.emailAddress}">
+
+              </td>
+            </tr>
+          </tbody>
+        </table>
         <form th:action="@{/fedops/invite}" method="post">
+          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+          <input type="hidden" th:name="spEntityId" th:value="${serviceProvider.entityId}"/>
           <input type="submit" class="c-button" value="Send invite"/>
         </form>
       </div>

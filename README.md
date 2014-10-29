@@ -1,5 +1,12 @@
 # Selfregistration
 
+Create database
+
+    mysql -uroot
+    CREATE DATABASE selfregistration_dev_db DEFAULT CHARACTER SET utf8
+    create user 'selfregistration'@'localhost' identified by 'selfregistration'
+    grant all on selfregistration_dev_db.* to 'selfregistration'@'localhost';
+
 To run locally:
 
     mvn spring-boot:run -Drun.jvmArguments="-Dspring.profiles.active=dev"

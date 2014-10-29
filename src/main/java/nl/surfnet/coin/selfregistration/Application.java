@@ -1,8 +1,12 @@
 package nl.surfnet.coin.selfregistration;
 
 
+import com.googlecode.flyway.core.Flyway;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 import nl.surfnet.coin.selfregistration.web.shibboleth.ShibbolethPreAuthenticatedProcessingFilter;
 import nl.surfnet.coin.selfregistration.web.shibboleth.ShibbolethUserDetailService;
+import nl.surfnet.coin.selfregistration.web.shibboleth.mock.InMemoryMail;
+import nl.surfnet.coin.selfregistration.web.shibboleth.mock.LetterOpener;
 import nl.surfnet.coin.selfregistration.web.shibboleth.mock.MockShibbolethFilter;
 import nl.surfnet.coin.stoker.Stoker;
 import org.slf4j.Logger;
@@ -16,6 +20,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.Resource;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -24,7 +31,8 @@ import org.springframework.security.web.authentication.preauth.AbstractPreAuthen
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import java.io.IOException;
+import javax.sql.DataSource;
+import java.beans.PropertyVetoException;
 
 @Configuration
 @EnableAutoConfiguration
@@ -35,9 +43,50 @@ public class Application extends WebMvcConfigurerAdapter {
     new SpringApplicationBuilder(Application.class).run(args);
   }
 
+  @Value("${db.user}")
+  private String user;
+
+  @Value("${db.password}")
+  private String password;
+
+  @Value("${db.jdbcUrl}")
+  private String jdbcUrl;
+
+
   @Bean
   public Stoker stoker(@Value("${stoker.metaDataLocation}") Resource metaDataFileLocation, @Value("${stoker.location}") Resource stokerLocation) throws Exception {
     return new Stoker(metaDataFileLocation, stokerLocation);
+  }
+
+  @Bean
+  public JdbcTemplate jdbcTemplate() throws PropertyVetoException {
+    return new JdbcTemplate(dataSource());
+  }
+
+  @Bean
+  public DataSource dataSource()
+    throws PropertyVetoException {
+
+    ComboPooledDataSource dataSource = new ComboPooledDataSource();
+    dataSource.setUser(user);
+    dataSource.setPassword(password);
+    dataSource.setJdbcUrl(jdbcUrl);
+    dataSource.setDriverClass("com.mysql.jdbc.Driver");
+    dataSource.setAcquireIncrement(5);
+    dataSource.setMinPoolSize(5);
+    dataSource.setMaxPoolSize(5);
+    dataSource.setMaxConnectionAge(60);
+    dataSource.setAcquireRetryAttempts(3);
+    dataSource.setAcquireRetryDelay(1000);
+    return dataSource;
+  }
+
+  @Bean(initMethod = "migrate")
+  public Flyway flyway() throws PropertyVetoException {
+    Flyway flyway = new Flyway();
+    flyway.setDataSource(dataSource());
+    flyway.setLocations("/db/migrations");
+    return flyway;
   }
 
 
@@ -68,8 +117,27 @@ public class Application extends WebMvcConfigurerAdapter {
   }
 
   @Configuration
-  @Profile("dev")
-  protected static class DevelopmentSecurity {
+  @Profile("production")
+  protected static class Production {
+    @Bean
+    public JavaMailSender mail() {
+      return new JavaMailSenderImpl();
+    }
+  }
+
+  @Configuration
+  @Profile("test")
+  protected static class Test {
+    @Bean
+    public JavaMailSender mail() {
+      return new InMemoryMail();
+    }
+
+  }
+
+  @Configuration
+  @Profile({"dev", "test"})
+  protected static class MockShibboleth {
 
     @Bean
     public FilterRegistrationBean mockShibbolethFilter() {
@@ -78,5 +146,16 @@ public class Application extends WebMvcConfigurerAdapter {
       filterRegistrationBean.addUrlPatterns("/*");
       return filterRegistrationBean;
     }
+
+  }
+  @Configuration
+  @Profile("dev")
+  protected static class Development {
+
+    @Bean
+    public JavaMailSender mail() {
+      return new LetterOpener();
+    }
+
   }
 }
