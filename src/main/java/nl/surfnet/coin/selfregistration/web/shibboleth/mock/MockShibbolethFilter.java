@@ -8,7 +8,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.IOException;
 
-public class MockShibbolethFilter implements Filter {
+public class    MockShibbolethFilter implements Filter {
 
   private static final Logger LOG = LoggerFactory.getLogger(MockShibbolethFilter.class);
 

@@ -16,7 +16,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.mail.internet.InternetAddress;
-import java.net.URLEncoder;
 
 import static java.util.Arrays.asList;
 import static nl.surfnet.coin.selfregistration.web.shibboleth.mock.InMemoryMail.inbox;

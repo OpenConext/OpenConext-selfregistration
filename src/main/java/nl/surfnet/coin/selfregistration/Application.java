@@ -3,6 +3,8 @@ package nl.surfnet.coin.selfregistration;
 
 import com.googlecode.flyway.core.Flyway;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import nl.surfnet.coin.selfregistration.invite.InviteDao;
+import nl.surfnet.coin.selfregistration.invite.InviteService;
 import nl.surfnet.coin.selfregistration.web.shibboleth.ShibbolethPreAuthenticatedProcessingFilter;
 import nl.surfnet.coin.selfregistration.web.shibboleth.ShibbolethUserDetailService;
 import nl.surfnet.coin.selfregistration.web.shibboleth.mock.InMemoryMail;
@@ -11,10 +13,12 @@ import nl.surfnet.coin.selfregistration.web.shibboleth.mock.MockShibbolethFilter
 import nl.surfnet.coin.stoker.Stoker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -52,15 +56,16 @@ public class Application extends WebMvcConfigurerAdapter {
   @Value("${db.jdbcUrl}")
   private String jdbcUrl;
 
+  @Value("${invitation.baseUrl}")
+  private String invitationBaseUrl;
+
+  @Autowired
+  private MessageSource messageSource;
+
 
   @Bean
   public Stoker stoker(@Value("${stoker.metaDataLocation}") Resource metaDataFileLocation, @Value("${stoker.location}") Resource stokerLocation) throws Exception {
     return new Stoker(metaDataFileLocation, stokerLocation);
-  }
-
-  @Bean
-  public JdbcTemplate jdbcTemplate() throws PropertyVetoException {
-    return new JdbcTemplate(dataSource());
   }
 
   @Bean
@@ -87,6 +92,16 @@ public class Application extends WebMvcConfigurerAdapter {
     flyway.setDataSource(dataSource());
     flyway.setLocations("/db/migrations");
     return flyway;
+  }
+
+  @Bean
+  public InviteDao inviteDao() throws PropertyVetoException {
+    return new InviteDao(dataSource());
+  }
+
+  @Bean
+  public InviteService inviteService(JavaMailSender javaMailSender) throws PropertyVetoException {
+    return new InviteService(inviteDao(), dataSource(), javaMailSender, messageSource, invitationBaseUrl);
   }
 
 

@@ -1,4 +1,4 @@
-package nl.surfnet.coin.selfregistration.model;
+package nl.surfnet.coin.selfregistration.invite;
 
 import org.joda.time.DateTime;
 
