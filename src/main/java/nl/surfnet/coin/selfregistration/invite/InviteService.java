@@ -39,8 +39,23 @@ public class InviteService {
 
   private SimpleMailMessage createMailMessage(String[] to, Invitation invitation) {
     SimpleMailMessage mailMessage = new SimpleMailMessage();
-    mailMessage.setSubject(messageSource.getMessage("invite.text.subject", null, Locale.ENGLISH));
-    mailMessage.setText(messageSource.getMessage("invite.text.body", new Object[]{String.format("%s/invitations/%s", invitationBaseUrl, invitation.getUuid())}, Locale.ENGLISH));
+    mailMessage.setSubject(
+      messageSource.getMessage(
+        "invite.text.subject",
+        null,
+        Locale.ENGLISH
+      )
+    );
+    mailMessage.setText(
+      messageSource.getMessage(
+        "invite.text.body",
+        new Object[]{String.format("%s/service-provider/%s",
+          invitationBaseUrl,
+          invitation.getUuid())
+        },
+        Locale.ENGLISH
+      )
+    );
     mailMessage.setTo(to);
     return mailMessage;
   }
