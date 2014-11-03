@@ -15,14 +15,15 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
+@RequestMapping("/service-provider")
 public class AppController {
 
-  @RequestMapping(value = "/service-provider", method = GET)
+  @RequestMapping(value = "", method = GET)
   public ModelAndView home(ServiceProvider serviceProvider) {
     return new ModelAndView("new");
   }
 
-  @RequestMapping(value = "/service-provider", method = POST)
+  @RequestMapping(value = "", method = POST)
   public String post(@Valid ServiceProvider serviceProvider, BindingResult bindingResult) {
     if (bindingResult.hasErrors()) {
       System.out.println(bindingResult);
