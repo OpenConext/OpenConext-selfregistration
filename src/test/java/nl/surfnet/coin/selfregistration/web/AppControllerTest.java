@@ -24,7 +24,7 @@ public class AppControllerTest {
   @Test
   public void testGetsAnEmptyForm() throws Exception {
     mockMvc
-      .perform(get("/service-provider"))
+      .perform(get("/service-provider/foo"))
       .andExpect(model().attributeExists("serviceProvider"));
   }
 

@@ -3,6 +3,7 @@ package nl.surfnet.coin.selfregistration.web;
 import nl.surfnet.coin.selfregistration.model.ServiceProvider;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,8 +19,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RequestMapping("/service-provider")
 public class AppController {
 
-  @RequestMapping(value = "", method = GET)
-  public ModelAndView home(ServiceProvider serviceProvider) {
+  @RequestMapping(value = "/{invitationId}", method = GET)
+  public ModelAndView home(ServiceProvider serviceProvider, @PathVariable String invitationId) {
     return new ModelAndView("new");
   }
 
