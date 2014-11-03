@@ -24,13 +24,10 @@ public class AppController {
     return new ModelAndView("new");
   }
 
-  @RequestMapping(value = "", method = POST)
-  public String post(@Valid ServiceProvider serviceProvider, BindingResult bindingResult) {
+  @RequestMapping(value = "/{invitationId}", method = POST)
+  public String post(@Valid ServiceProvider serviceProvider, BindingResult bindingResult, @PathVariable String invitationId) {
     if (bindingResult.hasErrors()) {
-      System.out.println(bindingResult);
       return "new";
-    } else {
-      System.out.println(serviceProvider);
     }
     return "redirect:/";
   }

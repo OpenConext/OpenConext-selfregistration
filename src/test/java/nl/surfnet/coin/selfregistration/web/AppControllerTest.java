@@ -32,7 +32,13 @@ public class AppControllerTest {
   @Test
   public void testPostToServiceProvider() throws Exception {
     mockMvc
-      .perform(post("/service-provider").sessionAttr("serviceProvider", new ServiceProvider()))
-      .andExpect(model().attributeHasFieldErrors("serviceProvider", "entityId"));
+      .perform(
+        post("/service-provider/foo")
+          .sessionAttr("serviceProvider", new ServiceProvider())
+      )
+      .andExpect(
+        model()
+          .attributeHasFieldErrors("serviceProvider", "entityId")
+      );
   }
 }
