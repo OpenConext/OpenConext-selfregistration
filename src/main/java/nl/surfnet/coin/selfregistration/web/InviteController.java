@@ -20,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
@@ -88,7 +89,7 @@ public class InviteController {
   }
 
   @RequestMapping(value = "/invite", method = POST)
-  public String doInvite(@RequestParam String spEntityId) {
+  public String doInvite(@RequestParam String spEntityId, RedirectAttributes redirectAttributes) {
     StokerEntry serviceProvider = stoker.getEduGainServiceProvider(spEntityId);
     String[] to = mailTo(serviceProvider);
     final Invitation invitation = new Invitation(spEntityId, StringUtils.join(to, ","));
@@ -110,6 +111,7 @@ public class InviteController {
       }
     );
     javaMailSender.send(mailMessage);
+    redirectAttributes.addFlashAttribute("flash.notice", messageSource.getMessage("invite.invited", new Object[]{spEntityId}, Locale.ENGLISH));
     return "redirect:/fedops";
   }
 

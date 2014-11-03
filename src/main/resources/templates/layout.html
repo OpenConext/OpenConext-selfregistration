@@ -22,6 +22,11 @@
   </div>
 </div>
 <div class="l-main">
+  <div class="mod-flash">
+    <div class="flash-notice" th:classappend="${#vars['flash.notice'] == null} ? 'hidden'" th:text="${#vars['flash.notice']}">
+
+    </div>
+  </div>
   <div layout:fragment="content">
     Hier staat niks
   </div>
