@@ -23,8 +23,9 @@
 </div>
 <div class="l-main">
   <div class="mod-flash">
-    <div class="flash-notice" th:classappend="${#vars['flash.notice'] == null} ? 'hidden'" th:text="${#vars['flash.notice']}">
-
+    <div class="flash-notice" th:classappend="${#vars['flash.notice'] == null} ? 'hidden'">
+      <a class="close" href="#">X</a>
+      <span th:text="${#vars['flash.notice']}">flash text</span>
     </div>
   </div>
   <div layout:fragment="content">

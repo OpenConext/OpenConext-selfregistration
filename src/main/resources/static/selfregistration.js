@@ -14,4 +14,8 @@ $(function() {
   $("#search-results tr").on("click", function() {
     $(this).find("form").submit();
   });
+
+  $(".flash-notice a").on("click", function() {
+    $(".flash-notice").toggleClass("hidden");
+  });
 });
