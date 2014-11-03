@@ -1,17 +1,12 @@
 package nl.surfnet.coin.selfregistration.web;
 
 import nl.surfnet.coin.selfregistration.Application;
-import nl.surfnet.coin.stoker.ContactPerson;
-import nl.surfnet.coin.stoker.Stoker;
-import nl.surfnet.coin.stoker.StokerEntry;
+import nl.surfnet.coin.selfregistration.web.shibboleth.mock.InMemoryMail;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -19,14 +14,15 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Arrays;
+import javax.mail.internet.InternetAddress;
+import java.net.URLEncoder;
 
+import static java.util.Arrays.asList;
+import static nl.surfnet.coin.selfregistration.web.shibboleth.mock.InMemoryMail.inbox;
+import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,6 +34,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 public class InviteControllerIntegrationTest {
 
+  // in file 64db397e6f93619687d294bed6639c29.xml
+  public static final String SP_ENTITY_ID = "http://saml.ps-ui-test.qalab.geant.net";
   @Autowired
   InviteController inviteController;
 
@@ -48,8 +46,12 @@ public class InviteControllerIntegrationTest {
 
   @Before
   public void setup() {
-
     this.mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    InMemoryMail.empty();
   }
 
   @Test
@@ -57,10 +59,16 @@ public class InviteControllerIntegrationTest {
     this.mockMvc
       .perform(
         post("/fedops/invite")
-          .param("spEntityId", "http://saml.ps-ui-test.qalab.geant.net")
+          .param("spEntityId", SP_ENTITY_ID)
       )
       .andExpect(status().is3xxRedirection())
-      .andExpect(redirectedUrl("/invite"));
+      .andExpect(redirectedUrl("/fedops"));
 
+    assertEquals(1, inbox().size());
+    assertThat(asList(inbox().get(0).getAllRecipients()), hasItem(new InternetAddress("it@dante.net")));
+    assertThat(asList(inbox().get(0).getAllRecipients()), hasItem(new InternetAddress("DANTEITSupport@dante.net")));
+    assertEquals("Please register your service provider", inbox().get(0).getSubject());
   }
+
+
 }

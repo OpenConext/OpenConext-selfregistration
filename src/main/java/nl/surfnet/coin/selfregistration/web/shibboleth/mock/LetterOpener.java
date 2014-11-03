@@ -37,6 +37,9 @@ public class LetterOpener extends JavaMailSenderImpl {
           }
         } else {
           String message = (String) mimeMessage.getContent();
+          if(mimeMessage.getContentType().equalsIgnoreCase("text/plain")) {
+            message = String.format("<html><body>Subject:<pre>%s</pre><p>Body:<pre>%s</pre></body></html>", mimeMessage.getSubject(), mimeMessage.getContent());
+          }
           openInBrowser(message);
         }
       }
