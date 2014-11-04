@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
-public class AppControllerTest {
+public class AppControllerIntegrationTest {
 
   public static final String CSRF_TOKEN_PARAM_NAME = "_csrf";
   public static final String TOKEN_STRING = "foo";
