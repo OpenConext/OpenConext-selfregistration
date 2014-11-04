@@ -25,7 +25,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
 @RequestMapping("/fedops")
-public class InviteController {
+public class InviteController extends BaseController {
 
   private static class ServiceProviderOrderer {
     private final Collection<StokerEntry> serviceProviders;
@@ -51,9 +51,6 @@ public class InviteController {
   private Stoker stoker;
 
   @Autowired
-  private MessageSource messageSource;
-
-  @Autowired
   private InviteService inviteService;
 
   @RequestMapping(method = GET)
@@ -72,7 +69,7 @@ public class InviteController {
     String[] to = mailTo(serviceProvider);
     final Invitation invitation = new Invitation(spEntityId, StringUtils.join(to, ","));
     inviteService.perEmail(invitation, to);
-    redirectAttributes.addFlashAttribute("flash.notice", messageSource.getMessage("invite.invited", new Object[]{spEntityId}, Locale.ENGLISH));
+    notice(redirectAttributes, "invite.invited", spEntityId);
     return "redirect:/fedops";
   }
 

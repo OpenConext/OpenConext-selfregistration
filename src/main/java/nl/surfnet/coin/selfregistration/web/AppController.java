@@ -25,20 +25,17 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
 @RequestMapping("/service-provider")
-public class AppController {
+public class AppController extends BaseController {
 
   @Autowired
   private InviteService inviteService;
-
-  @Autowired
-  private MessageSource messageSource;
 
   @RequestMapping(value = "/{invitationId}", method = GET)
   public ModelAndView home(OauthSettings oauthSettings, @PathVariable String invitationId, RedirectAttributes redirectAttributes) {
     Optional<Invitation> invitation = inviteService.get(invitationId);
     if(invitation.isPresent()) {
       if(invitation.get().isAccepted()) {
-        redirectAttributes.addFlashAttribute("flash.notice", messageSource.getMessage("invite.already_added", new Object[]{}, Locale.ENGLISH));
+        notice(redirectAttributes, "invite.already_added");
       }
       return new ModelAndView("new", "invitationId", invitationId);
 
@@ -48,10 +45,11 @@ public class AppController {
   }
 
   @RequestMapping(value = "/{invitationId}", method = POST)
-  public String post(@Valid OauthSettings oauthSettings, BindingResult bindingResult, @PathVariable String invitationId) {
+  public String post(@Valid OauthSettings oauthSettings, BindingResult bindingResult, @PathVariable String invitationId, RedirectAttributes redirectAttributes) {
     if (bindingResult.hasErrors()) {
       return "new";
     }
+    notice(redirectAttributes, "serviceProvider.created");
     return "redirect:/";
   }
 }
