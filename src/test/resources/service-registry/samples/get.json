@@ -1,0 +1,120 @@
+{
+  "updatedByUserName": "urn:collab:person:test.surfguest.nl:oharsta",
+  "updatedFromIp": "195.169.126.98",
+  "id": 5,
+  "name": "https://portal.test.surfconext.nl/shibboleth",
+  "revisionNr": 65,
+  "state": "prodaccepted",
+  "type": "saml20-sp",
+  "metadataUrl": "https://portal.test.surfconext.nl/Shibboleth.sso/Metadata",
+  "allowAllEntities": true,
+  "arpAttributes": {
+    "urn:mace:dir:attribute-def:cn": [
+      "*"
+    ],
+    "urn:mace:dir:attribute-def:displayName": [
+      "*"
+    ],
+    "urn:mace:dir:attribute-def:givenName": [
+      "*"
+    ],
+    "urn:mace:dir:attribute-def:uid": [
+      "*"
+    ]
+  },
+  "manipulationCode": "",
+  "parentRevisionNr": 64,
+  "revisionNote": "test with profile",
+  "isActive": true,
+  "createdAtDate": "2013-10-22T14:12:17+0200",
+  "updatedAtDate": "2013-10-22T14:12:17+0200",
+  "metadata": {
+    "items": {
+      "AssertionConsumerService": [
+        {
+          "Binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+          "index": "1",
+          "Location": "https://portal.test.surfconext.nl/Shibboleth.sso/SAML2/POST"
+        },
+        {
+          "Binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact",
+          "index": "3",
+          "Location": "https://portal.test.surfconext.nl/Shibboleth.sso/SAML2/Artifact"
+        },
+        {
+          "Binding": "urn:oasis:names:tc:SAML:2.0:bindings:PAOS",
+          "index": "4",
+          "Location": "https://portal.test.surfconext.nl/Shibboleth.sso/SAML2/ECP"
+        }
+      ],
+      "certData": "MIIElDCCA3ygAwIBAgIRALiiKpfyWJ/KD9lnPViI/JowDQYJKoZIhvcNAQEFBQAwNjELMAkGA1UEBhMCTkwxDzANBgNVBAoTBlRFUkVOQTEWMBQGA1UEAxMNVEVSRU5BIFNTTCBDQTAeFw0xMTA0MTQwMDAwMDBaFw0xNDA0MTMyMzU5NTlaMFYxCzAJBgNVBAYTAk5MMRUwEwYDVQQKEwxTVVJGbmV0IEIuVi4xETAPBgNVBAsTCFNlcnZpY2VzMR0wGwYDVQQDFBQqLnRlc3Quc3VyZmNvbmV4dC5ubDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALW9kKFjpT6SsdYr2nNfG41oBbGMuCP/EdzCCb0aGp/xmO5wJXbxQFeNOJSmynDyMAgDMMWz00kDWuv1IDiMsv5Yjr5wkpij0n/9PhKSC53kmCqFRYOvE0FOSQJdPeSJ9VPx8DrhAhKjbey+Y03Rg885yDT+Gfwbi4S3CjV75Q7bGl0YIdOeNsuDug7tNZZQr+0SaOEbr5TcXjsy2Lku3+aVo72XXa5pSj76qXVaKk4d2WR0WK4/FhH+1ZyOHwZrAL2WhXoyaVl58fsEoVxI/S+3MCoaAOJFQTkasDUeFHXK0Apf+Goq6+iddZTTJ2KomgspcbqG5v4RyU/brCQmdXMCAwEAAaOCAXswggF3MB8GA1UdIwQYMBaAFAy9k2gM896ro0lrKzdXR+qQ47ntMB0GA1UdDgQWBBQTOubwIqsyvkMvOng9SgBpPJfJAzAOBgNVHQ8BAf8EBAMCBaAwDAYDVR0TAQH/BAIwADAdBgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIwGAYDVR0gBBEwDzANBgsrBgEEAbIxAQICHTA6BgNVHR8EMzAxMC+gLaArhilodHRwOi8vY3JsLnRjcy50ZXJlbmEub3JnL1RFUkVOQVNTTENBLmNybDBtBggrBgEFBQcBAQRhMF8wNQYIKwYBBQUHMAKGKWh0dHA6Ly9jcnQudGNzLnRlcmVuYS5vcmcvVEVSRU5BU1NMQ0EuY3J0MCYGCCsGAQUFBzABhhpodHRwOi8vb2NzcC50Y3MudGVyZW5hLm9yZzAzBgNVHREELDAqghQqLnRlc3Quc3VyZmNvbmV4dC5ubIISdGVzdC5zdXJmY29uZXh0Lm5sMA0GCSqGSIb3DQEBBQUAA4IBAQA9gHPPlWPoMZVWegfnEgQmA8D3ul39ylDpjG1Nm9+stNWQ67roRfiD2rpx3EGRd+op3S8/lQGuxPrjkv21okpo53ZjeDd4+Wp8dhN9E+pDBBdk6YXSmMJ/CzT9mhs9Ue8AgEQYVY1ztoS3kVW7YEVLMUczTABN97at7mgxCtTHKKHSMdYRGZKhaZ9fC4x10YRX1GLfsB5AI0/HXDtVKRkhzaLWBsAmjAfw0v0bZ7rNKi+vNeOKYPjW+xC3XQ5DTWTgR4ox8PKkAYgkl0+t/hr5KjEgvrmITwtpSUyiNiro2ZqigxzyC23OzNoZWsO/29Phck1Vd5kAmCsh0FMjfLos",
+      "coin": {
+        "additional_logging": true,
+        "gadgetbaseurl": "https://portal.test.surfconext.nl/.*",
+        "oauth": {
+          "secret": "mysecret"
+        }
+      },
+      "contacts": [
+        {
+          "contactType": "technical",
+          "emailAddress": "surfconext-beheer@surfnet.nl",
+          "givenName": "surfconext",
+          "surName": "beheer",
+          "telephoneNumber": "123456789"
+        },
+        {
+          "contactType": "technical",
+          "emailAddress": "",
+          "givenName": "",
+          "surName": "",
+          "telephoneNumber": ""
+        },
+        {
+          "contactType": "technical",
+          "emailAddress": "",
+          "givenName": "",
+          "surName": "",
+          "telephoneNumber": ""
+        }
+      ],
+      "description": {
+        "en": "SURFconext Portal | Test | SURFnet",
+        "nl": "SURFconext Portal | Test | SURFnet"
+      },
+      "logo": [
+        {
+          "height": "",
+          "url": "https://.png",
+          "width": "120"
+        }
+      ],
+      "name": {
+        "en": "SURFconext Portal | Test | SURFnet",
+        "nl": "SURFconext Portal | Test | SURFnet"
+      },
+      "NameIDFormat": "urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified",
+      "NameIDFormats": [
+        "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent",
+        "urn:oasis:names:tc:SAML:2.0:nameid-format:transient",
+        "urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified"
+      ],
+      "redirect": {
+        "sign": false
+      },
+      "UIInfo": {
+        "DisplayName": {
+          "en": "SURFconext Portal | Test | SURFnet",
+          "nl": "SURFconext Portal | Test | SURFnet"
+        }
+      },
+      "url": {
+        "en": "",
+        "nl": ""
+      }
+    }
+  },
+  "allowedConnections": [],
+  "blockedConnections": [],
+  "disableConsentConnections": []
+}
