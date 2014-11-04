@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.security.web.csrf.DefaultCsrfToken;
@@ -18,6 +19,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
+import javax.sql.DataSource;
 
 import static nl.surfnet.coin.selfregistration.web.TestInstances.emptyOauthSettings;
 import static nl.surfnet.coin.selfregistration.web.TestInstances.validOauthSettings;
@@ -48,9 +51,15 @@ public class AppControllerIntegrationTest {
   @Autowired
   FilterChainProxy springSecurityFilterChain;
 
+  @Autowired
+  DataSource dataSource;
+
+  private JdbcTemplate jdbcTemplate;
+
 
   @Before
   public void setUp() throws Exception {
+    jdbcTemplate = new JdbcTemplate(dataSource);
     this.mockMvc = MockMvcBuilders
       .webAppContextSetup(wac)
       .addFilter(springSecurityFilterChain)
@@ -60,6 +69,7 @@ public class AppControllerIntegrationTest {
   @After
   public void tearDown() throws Exception {
     SecurityContextHolder.clearContext();
+    jdbcTemplate.update("delete from invitations");
   }
 
   @Test
