@@ -117,7 +117,10 @@ public class Application extends WebMvcConfigurerAdapter {
       ShibbolethPreAuthenticatedProcessingFilter filter = new ShibbolethPreAuthenticatedProcessingFilter();
       filter.setAuthenticationManager(authenticationManagerBean());
       http.addFilterBefore(filter, AbstractPreAuthenticatedProcessingFilter.class);
-      http.authorizeRequests().anyRequest().hasAnyRole("USER");
+      http
+        .authorizeRequests()
+          .antMatchers("/*").permitAll()
+          .antMatchers("/fedops").hasAnyRole("USER");
       http.csrf();
     }
 
