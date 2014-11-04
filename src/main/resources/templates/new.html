@@ -14,11 +14,13 @@
       <h1 th:text="#{new.title}"></h1>
 
       <div class="serviceprovider-container">
-        <form name="add-service-provider" th:action="@{/service-provider}" th:object="${serviceProvider}" method="post">
+        <form name="add-service-provider" th:action="@{/service-provider/${invitationId}}" th:object="${oauthSettings}" method="post">
           <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
           <div class="fields">
-            <div th:include="forms :: textfield(fieldName=entityId)"/>
+            <div th:include="forms :: textfield(fieldName=secret)"/>
+            <div th:include="forms :: textfield(fieldName=consumerKey)"/>
+            <div th:include="forms :: textfield(fieldName=callbackUrl)"/>
           </div>
           <div class="buttons">
             <input type="submit" class="c-button" value="Save"/>

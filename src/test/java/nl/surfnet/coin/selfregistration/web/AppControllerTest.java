@@ -3,6 +3,7 @@ package nl.surfnet.coin.selfregistration.web;
 import com.google.common.base.Optional;
 import nl.surfnet.coin.selfregistration.invite.Invitation;
 import nl.surfnet.coin.selfregistration.invite.InviteService;
+import nl.surfnet.coin.selfregistration.model.OauthSettings;
 import nl.surfnet.coin.selfregistration.model.ServiceProvider;
 import org.hamcrest.collection.IsMapContaining;
 import org.joda.time.DateTime;
@@ -47,7 +48,7 @@ public class AppControllerTest {
 
   private Invitation acceptedInvitation;
   private Invitation invitation;
-  private ServiceProvider serviceProvider;
+  private OauthSettings oauthSettings;
 
   @Before
   public void setUp() throws Exception {
@@ -59,14 +60,14 @@ public class AppControllerTest {
     invitation = new Invitation("entityId", "foo@localhost.nl");
     invitation.setUuid(INVITE_ID);
     acceptedInvitation.setAcceptedAt(new DateTime());
-    serviceProvider = new ServiceProvider();
+    oauthSettings = new OauthSettings();
   }
 
   @Test
   public void testFailsWhenInvitationIdDoesNotExist() throws Exception {
     when(inviteService.get("not exists")).thenReturn(Optional.<Invitation>fromNullable(null));
 
-    ModelAndView modelAndView = appController.home(serviceProvider, "not exists", redirectAttributes);
+    ModelAndView modelAndView = appController.home(oauthSettings, "not exists", redirectAttributes);
 
     assertEquals("404", modelAndView.getViewName());
   }
@@ -76,7 +77,7 @@ public class AppControllerTest {
     when(inviteService.get(ACCEPTED_INVITE_ID)).thenReturn(Optional.of(acceptedInvitation));
     when(messageSource.getMessage("invite.already_added", new Object[]{}, Locale.ENGLISH)).thenReturn("foobar");
 
-    ModelAndView modelAndView = appController.home(serviceProvider, ACCEPTED_INVITE_ID, redirectAttributes);
+    ModelAndView modelAndView = appController.home(oauthSettings, ACCEPTED_INVITE_ID, redirectAttributes);
 
     assertEquals(redirectAttributes.getFlashAttributes().get("flash.notice"), "foobar");
     assertEquals("new", modelAndView.getViewName());
@@ -86,7 +87,7 @@ public class AppControllerTest {
   public void testDisplaysTheFormWhenAnInvitationExistsAndNotYetAccepted() throws Exception {
     when(inviteService.get(INVITE_ID)).thenReturn(Optional.of(invitation));
 
-    ModelAndView modelAndView = appController.home(serviceProvider, INVITE_ID, redirectAttributes);
+    ModelAndView modelAndView = appController.home(oauthSettings, INVITE_ID, redirectAttributes);
     assertThat(redirectAttributes.getFlashAttributes(), not(hasKey("flash.notice")));
     assertEquals("new", modelAndView.getViewName());
   }

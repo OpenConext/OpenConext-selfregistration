@@ -1,19 +1,15 @@
 package nl.surfnet.coin.selfregistration.web;
 
 import nl.surfnet.coin.selfregistration.Application;
-import nl.surfnet.coin.selfregistration.model.ServiceProvider;
+import nl.surfnet.coin.selfregistration.model.OauthSettings;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.security.authentication.TestingAuthenticationToken;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.FilterChainProxy;
-import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.DefaultCsrfToken;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.test.context.ActiveProfiles;
@@ -68,7 +64,7 @@ public class AppControllerIntegrationTest {
       .perform(
         get("/service-provider/foo")
       )
-      .andExpect(model().attributeExists("serviceProvider"));
+      .andExpect(model().attributeExists("oauthSettings"));
   }
 
   @Test
@@ -77,12 +73,20 @@ public class AppControllerIntegrationTest {
       .perform(
         post("/service-provider/foo")
           .param(CSRF_TOKEN_PARAM_NAME, TOKEN_STRING)
-          .sessionAttr("serviceProvider", new ServiceProvider())
+          .sessionAttr("oauthSettings", new OauthSettings())
           .sessionAttr(CSRF_TOKEN_SESSION_NAME, new DefaultCsrfToken(CSRF_TOKEN_SESSION_NAME, CSRF_TOKEN_PARAM_NAME, TOKEN_STRING))
       )
       .andExpect(
         model()
-          .attributeHasFieldErrors("serviceProvider", "entityId")
+          .attributeHasFieldErrors("oauthSettings", "secret")
+      )
+      .andExpect(
+        model()
+          .attributeHasFieldErrors("oauthSettings", "consumerKey")
+      )
+      .andExpect(
+        model()
+          .attributeHasFieldErrors("oauthSettings", "callbackUrl")
       );
   }
 }

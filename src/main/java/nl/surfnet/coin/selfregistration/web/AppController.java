@@ -3,6 +3,7 @@ package nl.surfnet.coin.selfregistration.web;
 import com.google.common.base.Optional;
 import nl.surfnet.coin.selfregistration.invite.Invitation;
 import nl.surfnet.coin.selfregistration.invite.InviteService;
+import nl.surfnet.coin.selfregistration.model.OauthSettings;
 import nl.surfnet.coin.selfregistration.model.ServiceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -33,20 +34,21 @@ public class AppController {
   private MessageSource messageSource;
 
   @RequestMapping(value = "/{invitationId}", method = GET)
-  public ModelAndView home(ServiceProvider serviceProvider, @PathVariable String invitationId, RedirectAttributes redirectAttributes) {
+  public ModelAndView home(OauthSettings oauthSettings, @PathVariable String invitationId, RedirectAttributes redirectAttributes) {
     Optional<Invitation> invitation = inviteService.get(invitationId);
     if(invitation.isPresent()) {
       if(invitation.get().isAccepted()) {
         redirectAttributes.addFlashAttribute("flash.notice", messageSource.getMessage("invite.already_added", new Object[]{}, Locale.ENGLISH));
       }
-      return new ModelAndView("new");
+      return new ModelAndView("new", "invitationId", invitationId);
+
     } else {
       return new ModelAndView("404");
     }
   }
 
   @RequestMapping(value = "/{invitationId}", method = POST)
-  public String post(@Valid ServiceProvider serviceProvider, BindingResult bindingResult, @PathVariable String invitationId) {
+  public String post(@Valid OauthSettings oauthSettings, BindingResult bindingResult, @PathVariable String invitationId) {
     if (bindingResult.hasErrors()) {
       return "new";
     }
