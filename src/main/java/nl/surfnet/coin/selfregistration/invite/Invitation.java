@@ -71,6 +71,6 @@ public class Invitation {
   }
 
   public boolean isAccepted() {
-    return createdAt != null;
+    return acceptedAt != null;
   }
 }
