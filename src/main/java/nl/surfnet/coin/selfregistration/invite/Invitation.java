@@ -69,4 +69,8 @@ public class Invitation {
   public void setMailedTo(String mailedTo) {
     this.mailedTo = mailedTo;
   }
+
+  public boolean isAccepted() {
+    return createdAt != null;
+  }
 }

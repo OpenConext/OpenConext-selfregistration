@@ -1,5 +1,6 @@
 package nl.surfnet.coin.selfregistration.invite;
 
+import com.google.common.base.Optional;
 import org.springframework.context.MessageSource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.mail.SimpleMailMessage;
@@ -61,4 +62,7 @@ public class InviteService {
   }
 
 
+  public Optional<Invitation> get(String invitationId) {
+    return inviteDao.get(invitationId);
+  }
 }
