@@ -1,7 +1,7 @@
 package nl.surfnet.coin.selfregistration.web;
 
 import nl.surfnet.coin.selfregistration.Application;
-import nl.surfnet.coin.selfregistration.web.shibboleth.mock.InMemoryMail;
+import nl.surfnet.coin.selfregistration.mock.InMemoryMail;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +18,7 @@ import org.springframework.web.context.WebApplicationContext;
 import javax.mail.internet.InternetAddress;
 
 import static java.util.Arrays.asList;
-import static nl.surfnet.coin.selfregistration.web.shibboleth.mock.InMemoryMail.inbox;
+import static nl.surfnet.coin.selfregistration.mock.InMemoryMail.inbox;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;

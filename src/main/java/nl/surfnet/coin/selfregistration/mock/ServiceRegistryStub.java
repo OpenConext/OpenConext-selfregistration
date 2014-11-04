@@ -1,4 +1,4 @@
-package nl.surfnet.coin.selfregistration.web.shibboleth.mock;
+package nl.surfnet.coin.selfregistration.mock;
 
 import nl.surfnet.coin.selfregistration.adapters.ServiceProvider;
 import nl.surfnet.coin.selfregistration.adapters.ServiceRegistryAdapter;

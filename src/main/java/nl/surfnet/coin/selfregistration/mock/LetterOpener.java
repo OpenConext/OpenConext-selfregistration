@@ -1,13 +1,10 @@
-package nl.surfnet.coin.selfregistration.web.shibboleth.mock;
+package nl.surfnet.coin.selfregistration.mock;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.mail.javamail.MimeMessagePreparator;
 
 import javax.mail.BodyPart;
 import javax.mail.MessagingException;
@@ -17,7 +14,6 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 
 public class LetterOpener extends JavaMailSenderImpl {
 

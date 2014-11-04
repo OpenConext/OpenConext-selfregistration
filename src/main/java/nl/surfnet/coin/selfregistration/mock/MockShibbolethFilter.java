@@ -1,11 +1,10 @@
-package nl.surfnet.coin.selfregistration.web.shibboleth.mock;
+package nl.surfnet.coin.selfregistration.mock;
 
 import nl.surfnet.coin.selfregistration.web.shibboleth.ShibbolethRequestAttributes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.*;
-import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.IOException;
 
 public class    MockShibbolethFilter implements Filter {
