@@ -3,6 +3,7 @@ package nl.surfnet.coin.selfregistration;
 
 import com.googlecode.flyway.core.Flyway;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import nl.surfnet.coin.selfregistration.adapters.ServiceRegistryAdapter;
 import nl.surfnet.coin.selfregistration.invite.InviteDao;
 import nl.surfnet.coin.selfregistration.invite.InviteService;
 import nl.surfnet.coin.selfregistration.web.shibboleth.ShibbolethPreAuthenticatedProcessingFilter;
@@ -10,6 +11,7 @@ import nl.surfnet.coin.selfregistration.web.shibboleth.ShibbolethUserDetailServi
 import nl.surfnet.coin.selfregistration.web.shibboleth.mock.InMemoryMail;
 import nl.surfnet.coin.selfregistration.web.shibboleth.mock.LetterOpener;
 import nl.surfnet.coin.selfregistration.web.shibboleth.mock.MockShibbolethFilter;
+import nl.surfnet.coin.selfregistration.web.shibboleth.mock.ServiceRegistryStub;
 import nl.surfnet.coin.stoker.Stoker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -155,7 +157,7 @@ public class Application extends WebMvcConfigurerAdapter {
 
   @Configuration
   @Profile({"dev", "test"})
-  protected static class MockShibboleth {
+  protected static class DevelopmentAndTest {
 
     @Bean
     public FilterRegistrationBean mockShibbolethFilter() {
@@ -163,6 +165,11 @@ public class Application extends WebMvcConfigurerAdapter {
       filterRegistrationBean.setFilter(new MockShibbolethFilter());
       filterRegistrationBean.addUrlPatterns("/*");
       return filterRegistrationBean;
+    }
+
+    @Bean
+    public ServiceRegistryAdapter serviceRegistryAdapter() {
+      return new ServiceRegistryStub();
     }
 
   }

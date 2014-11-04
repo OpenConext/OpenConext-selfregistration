@@ -3,27 +3,18 @@ package nl.surfnet.coin.selfregistration.web;
 import com.google.common.base.Optional;
 import nl.surfnet.coin.selfregistration.invite.Invitation;
 import nl.surfnet.coin.selfregistration.invite.InviteService;
-import nl.surfnet.coin.selfregistration.model.OauthSettings;
-import nl.surfnet.coin.selfregistration.model.ServiceProvider;
-import org.hamcrest.collection.IsMapContaining;
+import nl.surfnet.coin.selfregistration.adapters.OauthSettings;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.PropertyEditorRegistry;
 import org.springframework.context.MessageSource;
-import org.springframework.validation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
-import java.beans.PropertyEditor;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.collection.IsMapContaining.hasKey;

@@ -1,4 +1,4 @@
-package nl.surfnet.coin.selfregistration.model;
+package nl.surfnet.coin.selfregistration.adapters;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;

@@ -1,6 +1,7 @@
 package nl.surfnet.coin.selfregistration.web;
 
-import nl.surfnet.coin.selfregistration.model.OauthSettings;
+import nl.surfnet.coin.selfregistration.invite.Invitation;
+import nl.surfnet.coin.selfregistration.adapters.OauthSettings;
 
 import java.util.UUID;
 
@@ -18,6 +19,10 @@ public class TestInstances {
     oauthSettings.setConsumerKey("key");
     oauthSettings.setSecret(UUID.randomUUID().toString());
     return oauthSettings;
+  }
+
+  public static Invitation newInvitation(String spEntityId) {
+    return new Invitation(spEntityId, "foo@localhost.nl");
   }
 
 }

@@ -1,7 +1,9 @@
 package nl.surfnet.coin.selfregistration.web;
 
 import nl.surfnet.coin.selfregistration.Application;
-import nl.surfnet.coin.selfregistration.model.OauthSettings;
+import nl.surfnet.coin.selfregistration.adapters.ServiceRegistryAdapter;
+import nl.surfnet.coin.selfregistration.invite.Invitation;
+import nl.surfnet.coin.selfregistration.invite.InviteDao;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,20 +23,23 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.sql.DataSource;
+import java.net.URLEncoder;
 
-import static nl.surfnet.coin.selfregistration.web.TestInstances.emptyOauthSettings;
-import static nl.surfnet.coin.selfregistration.web.TestInstances.validOauthSettings;
+import static nl.surfnet.coin.selfregistration.web.TestInstances.*;
+import static org.hamcrest.core.Is.is;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
 public class AppControllerIntegrationTest {
+
+  // in file 64db397e6f93619687d294bed6639c29.xml
+  public static final String SP_ENTITY_ID = "http://saml.ps-ui-test.qalab.geant.net";
 
   public static final String CSRF_TOKEN_PARAM_NAME = "_csrf";
   public static final String TOKEN_STRING = "foo";
@@ -53,6 +58,9 @@ public class AppControllerIntegrationTest {
 
   @Autowired
   DataSource dataSource;
+
+  @Autowired
+  InviteDao inviteDao;
 
   private JdbcTemplate jdbcTemplate;
 
@@ -106,9 +114,12 @@ public class AppControllerIntegrationTest {
 
   @Test
   public void testPostNewServiceProviderSuccess() throws Exception {
+    Invitation invitation = newInvitation(SP_ENTITY_ID);
+    inviteDao.persist(invitation);
+
     this.mockMvc
       .perform(
-        post("/service-provider/foo")
+        post("/service-provider/" + URLEncoder.encode(invitation.getUuid(), "UTF-8"))
           .param(CSRF_TOKEN_PARAM_NAME, TOKEN_STRING)
           .param("callbackUrl", validOauthSettings().getCallbackUrl())
           .param("secret", validOauthSettings().getSecret())
@@ -122,7 +133,7 @@ public class AppControllerIntegrationTest {
         status().is3xxRedirection()
       )
       .andExpect(
-        flash().attributeExists("flash.notice")
+        flash().attribute("flash.notice", is("Service created"))
       );
   }
 }
