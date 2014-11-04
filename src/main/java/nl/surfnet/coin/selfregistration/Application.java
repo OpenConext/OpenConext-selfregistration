@@ -6,12 +6,12 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 import nl.surfnet.coin.selfregistration.adapters.ServiceRegistryAdapter;
 import nl.surfnet.coin.selfregistration.invite.InviteDao;
 import nl.surfnet.coin.selfregistration.invite.InviteService;
-import nl.surfnet.coin.selfregistration.web.shibboleth.ShibbolethPreAuthenticatedProcessingFilter;
-import nl.surfnet.coin.selfregistration.web.shibboleth.ShibbolethUserDetailService;
 import nl.surfnet.coin.selfregistration.mock.InMemoryMail;
 import nl.surfnet.coin.selfregistration.mock.LetterOpener;
 import nl.surfnet.coin.selfregistration.mock.MockShibbolethFilter;
 import nl.surfnet.coin.selfregistration.mock.ServiceRegistryStub;
+import nl.surfnet.coin.selfregistration.web.shibboleth.ShibbolethPreAuthenticatedProcessingFilter;
+import nl.surfnet.coin.selfregistration.web.shibboleth.ShibbolethUserDetailService;
 import nl.surfnet.coin.stoker.Stoker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -120,8 +120,8 @@ public class Application extends WebMvcConfigurerAdapter {
       http.addFilterBefore(filter, AbstractPreAuthenticatedProcessingFilter.class);
       http
         .authorizeRequests()
-          .antMatchers("/*").permitAll()
-          .antMatchers("/fedops").hasAnyRole("USER");
+        .antMatchers("/*").permitAll()
+        .antMatchers("/fedops").hasAnyRole("USER");
       http.csrf();
     }
 
@@ -172,6 +172,7 @@ public class Application extends WebMvcConfigurerAdapter {
     }
 
   }
+
   @Configuration
   @Profile("dev")
   protected static class Development {
