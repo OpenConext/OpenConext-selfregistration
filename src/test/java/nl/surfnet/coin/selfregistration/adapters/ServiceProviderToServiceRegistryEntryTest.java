@@ -1,11 +1,13 @@
 package nl.surfnet.coin.selfregistration.adapters;
 
+import nl.surfnet.coin.stoker.ContactPerson;
 import nl.surfnet.coin.stoker.Stoker;
 import nl.surfnet.coin.stoker.StokerEntry;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -26,28 +28,38 @@ public class ServiceProviderToServiceRegistryEntryTest {
     stokerEntry = stoker.getEduGainServiceProvider(SP_ENTITY_ID);
     actual = subject.convert(ServiceProvider.from(stokerEntry));
   }
+
   @Test
   public void testHasEntityId() throws Exception {
     assertEquals(stokerEntry.getEntityId(), actual.getName());
   }
+
   @Test
   public void testHasCorrectState() throws Exception {
     assertEquals("testaccepted", actual.getState());
   }
+
   @Test
   public void testHasCorrectType() throws Exception {
     assertEquals("saml20-sp", actual.getType());
   }
+
   @Test
   public void testHasCorrectAssertionConsumerServices() throws Exception {
-    List<Map<String, String>> result = metadata().assertionConsumerService();
+    Collection<Map<String, String>> result = metadata().assertionConsumerService();
     assertEquals(2, result.size());
   }
 
   @Test
   public void testHasCorrectNameIDFormats() throws Exception {
-    List<String> result = metadata().nameIdFormats();
+    Collection<String> result = metadata().nameIdFormats();
     assertEquals(3, result.size());
+  }
+
+  @Test
+  public void testHasCorrectContactPersons() throws Exception {
+    Collection<Map<String, String>> result =  metadata().contactPersons();
+    assertEquals(2, result.size());
   }
 
   private Metadata metadata() {

@@ -10,8 +10,10 @@ public class ServiceProviderToServiceRegistryEntry {
     serviceRegistryEntry.setName(serviceProvider.getEntityId());
     serviceRegistryEntry.setState(INITIAL_STATE);
     serviceRegistryEntry.setType(TYPE_SP);
-    serviceRegistryEntry.getMetadata().assertionConsumerServices(serviceProvider.getAssertionConsumerServices());
-    serviceRegistryEntry.getMetadata().nameIdFormats(serviceProvider.getNameIdFormats());
+    Metadata metadata = serviceRegistryEntry.getMetadata();
+    metadata.assertionConsumerServices(serviceProvider.getAssertionConsumerServices());
+    metadata.nameIdFormats(serviceProvider.getNameIdFormats());
+    metadata.contactPersons(serviceProvider.getContactPersons());
     return serviceRegistryEntry;
   }
 }

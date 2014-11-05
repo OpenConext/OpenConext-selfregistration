@@ -1,11 +1,9 @@
 package nl.surfnet.coin.selfregistration.adapters;
 
+import nl.surfnet.coin.stoker.ContactPerson;
 import nl.surfnet.coin.stoker.StokerEntry;
-import org.joda.time.DateTime;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.net.URL;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -44,5 +42,9 @@ public class ServiceProvider {
 
   public List<String> getNameIdFormats() {
     return stokerEntry.getNameIdFormats();
+  }
+
+  public Collection<ContactPerson> getContactPersons() {
+    return stokerEntry.getContactPersons();
   }
 }
