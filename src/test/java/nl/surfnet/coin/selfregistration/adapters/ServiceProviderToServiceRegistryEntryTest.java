@@ -15,24 +15,42 @@ public class ServiceProviderToServiceRegistryEntryTest {
   // in file 64db397e6f93619687d294bed6639c29.xml
   public static final String SP_ENTITY_ID = "http://saml.ps-ui-test.qalab.geant.net";
 
-  private Stoker stoker;
   private ServiceProviderToServiceRegistryEntry subject;
+  private StokerEntry stokerEntry;
+  private ServiceRegistryEntry actual;
 
   @Before
   public void setUp() throws Exception {
     subject = new ServiceProviderToServiceRegistryEntry();
-    stoker = new Stoker(new ClassPathResource("/stoker/metadata.index.json"), new ClassPathResource("/stoker/"));
+    Stoker stoker = new Stoker(new ClassPathResource("/adapters/metadata.index.json"), new ClassPathResource("/stoker/"));
+    stokerEntry = stoker.getEduGainServiceProvider(SP_ENTITY_ID);
+    actual = subject.convert(ServiceProvider.from(stokerEntry));
+  }
+  @Test
+  public void testHasEntityId() throws Exception {
+    assertEquals(stokerEntry.getEntityId(), actual.getName());
+  }
+  @Test
+  public void testHasCorrectState() throws Exception {
+    assertEquals("testaccepted", actual.getState());
+  }
+  @Test
+  public void testHasCorrectType() throws Exception {
+    assertEquals("saml20-sp", actual.getType());
+  }
+  @Test
+  public void testHasCorrectAssertionConsumerServices() throws Exception {
+    List<Map<String, String>> result = metadata().assertionConsumerService();
+    assertEquals(2, result.size());
   }
 
   @Test
-  public void testConvertsStokerEntryToServiceRegistry() throws Exception {
-    StokerEntry stokerEntry = stoker.getEduGainServiceProvider(SP_ENTITY_ID);
-    ServiceRegistryEntry actual = subject.convert(ServiceProvider.from(stokerEntry));
+  public void testHasCorrectNameIDFormats() throws Exception {
+    List<String> result = metadata().nameIdFormats();
+    assertEquals(3, result.size());
+  }
 
-    assertEquals(stokerEntry.getEntityId(), actual.getName());
-    assertEquals("testaccepted", actual.getState());
-    assertEquals("saml20-sp", actual.getType());
-    List<Map<String, String>> assertionConsumerService = actual.getMetadata().assertionConsumerService();
-    assertEquals(2, assertionConsumerService.size());
+  private Metadata metadata() {
+    return actual.getMetadata();
   }
 }

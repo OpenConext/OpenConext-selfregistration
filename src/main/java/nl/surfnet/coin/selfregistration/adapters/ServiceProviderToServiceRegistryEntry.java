@@ -11,6 +11,7 @@ public class ServiceProviderToServiceRegistryEntry {
     serviceRegistryEntry.setState(INITIAL_STATE);
     serviceRegistryEntry.setType(TYPE_SP);
     serviceRegistryEntry.getMetadata().assertionConsumerServices(serviceProvider.getAssertionConsumerServices());
+    serviceRegistryEntry.getMetadata().nameIdFormats(serviceProvider.getNameIdFormats());
     return serviceRegistryEntry;
   }
 }

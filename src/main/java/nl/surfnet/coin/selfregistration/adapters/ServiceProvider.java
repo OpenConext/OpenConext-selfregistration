@@ -42,4 +42,7 @@ public class ServiceProvider {
     return stokerEntry.getAssertionConsumerServices();
   }
 
+  public List<String> getNameIdFormats() {
+    return stokerEntry.getNameIdFormats();
+  }
 }

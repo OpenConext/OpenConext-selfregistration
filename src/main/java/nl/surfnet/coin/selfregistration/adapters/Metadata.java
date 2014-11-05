@@ -22,4 +22,13 @@ public class Metadata {
     items.put(ASSERTION_CONSUMER_SERVICE, entries);
     return this;
   }
+
+  public List<String> nameIdFormats() {
+    return (List<String>) items.get("NameIDFormat");
+  }
+
+  public Metadata nameIdFormats(List<String> nameIdFormats) {
+    items.put("NameIDFormat", nameIdFormats);
+    return this;
+  }
 }
