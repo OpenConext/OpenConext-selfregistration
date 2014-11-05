@@ -35,7 +35,7 @@ public class InviteControllerTest {
 
     stokerEntry = new StokerEntry();
     stokerEntry.setEntityId(ENTITY_ID);
-    stokerEntry.setContactPersons(Arrays.asList(new ContactPerson("technical", "surfnet", "surfnet@localhost.local")));
+    stokerEntry.setContactPersons(Arrays.asList(new ContactPerson("technical", "surfnet", "", "surfnet@localhost.local", "", "")));
   }
 
   @Test
