@@ -1,26 +1,28 @@
 package nl.surfnet.coin.selfregistration.adapters;
 
-import org.apache.http.Header;
-import org.apache.http.HttpException;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.http.*;
 import org.apache.http.localserver.BasicAuthTokenExtractor;
 import org.apache.http.localserver.LocalTestServer;
-import org.apache.http.localserver.RequestBasicAuth;
-import org.apache.http.protocol.BasicHttpProcessor;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpRequestHandler;
-import org.apache.http.protocol.ImmutableHttpProcessor;
+import org.apache.http.util.EntityUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
-import static nl.surfnet.coin.selfregistration.adapters.StokerEntryFactory.stokerEntry;
-import static org.junit.Assert.*;
 import static java.lang.String.format;
+import static nl.surfnet.coin.selfregistration.adapters.StokerEntryFactory.stokerEntry;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsMapContaining.hasKey;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 public class ServiceRegistryRestClientTest {
   // in file 64db397e6f93619687d294bed6639c29.xml
   public static final String SP_ENTITY_ID = "http://saml.ps-ui-test.qalab.geant.net";
@@ -34,12 +36,22 @@ public class ServiceRegistryRestClientTest {
     public HttpRequest httpRequest;
     public HttpResponse httpResponse;
     public HttpContext httpContext;
+    public String body = "";
 
     @Override
     public void handle(HttpRequest httpRequest, HttpResponse httpResponse, HttpContext httpContext) throws HttpException, IOException {
       this.httpRequest = httpRequest;
       this.httpResponse = httpResponse;
       this.httpContext = httpContext;
+      if (httpRequest instanceof HttpEntityEnclosingRequest) {
+        try {
+          HttpEntity entity = ((HttpEntityEnclosingRequest) httpRequest).getEntity();
+          byte[] data = EntityUtils.toByteArray(entity);
+          this.body = new String(data);
+        } catch (IOException e) {
+          throw new RuntimeException(e);
+        }
+      }
     }
   }
 
@@ -78,4 +90,25 @@ public class ServiceRegistryRestClientTest {
     assertEquals(format("%s:%s", USERNAME, PASSWORD), new BasicAuthTokenExtractor().extract(spyHandler.httpRequest));
   }
 
+  @Test
+  public void testJsonBodyHasName() throws Exception {
+    assertThat(body(), hasKey("name"));
+    assertEquals(SP_ENTITY_ID, body().get("name"));
+  }
+
+  @Test
+  public void testJsonBodyHasType() throws Exception {
+    assertThat(body(), hasKey("type"));
+    assertEquals("saml20-sp", body().get("type"));
+  }
+
+  @Test
+  public void testJsonBodyHasState() throws Exception {
+    assertThat(body(), hasKey("state"));
+    assertEquals("testaccepted", body().get("state"));
+  }
+
+  private Map<String, ?> body() throws IOException {
+    return new ObjectMapper().readValue(spyHandler.body, HashMap.class);
+  }
 }
