@@ -17,15 +17,13 @@ public class ServiceProviderToServiceRegistryEntryTest {
   // in file 64db397e6f93619687d294bed6639c29.xml
   public static final String SP_ENTITY_ID = "http://saml.ps-ui-test.qalab.geant.net";
 
-  private ServiceProviderToServiceRegistryEntry subject;
   private StokerEntry stokerEntry;
   private ServiceRegistryEntry actual;
 
   @Before
   public void setUp() throws Exception {
-    subject = new ServiceProviderToServiceRegistryEntry();
     stokerEntry = StokerEntryFactory.stokerEntry(new ClassPathResource("/adapters/metadata.index.json"), SP_ENTITY_ID);
-    actual = subject.convert(ServiceProvider.from(stokerEntry));
+    actual = ServiceProviderToServiceRegistryEntry.convert(ServiceProvider.from(stokerEntry));
   }
 
   @Test
@@ -57,7 +55,7 @@ public class ServiceProviderToServiceRegistryEntryTest {
 
   @Test
   public void testHasCorrectContactPersons() throws Exception {
-    Collection<Map<String, String>> result =  metadata().contactPersons();
+    Collection<Map<String, String>> result = metadata().contactPersons();
     assertEquals(2, result.size());
   }
 
