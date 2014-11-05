@@ -4,6 +4,7 @@ package nl.surfnet.coin.selfregistration;
 import com.googlecode.flyway.core.Flyway;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import nl.surfnet.coin.selfregistration.adapters.ServiceRegistryAdapter;
+import nl.surfnet.coin.selfregistration.adapters.ServiceRegistryRestClient;
 import nl.surfnet.coin.selfregistration.invite.InviteDao;
 import nl.surfnet.coin.selfregistration.invite.InviteService;
 import nl.surfnet.coin.selfregistration.mock.InMemoryMail;
@@ -136,6 +137,34 @@ public class Application extends WebMvcConfigurerAdapter {
   }
 
   @Configuration
+  @Profile({"dev", "production"})
+  protected static class ProductionAndDev {
+
+    @Value("${sr.protocol}")
+    private String protocol;
+
+    @Value("${sr.hostname}")
+    private String hostname;
+
+    @Value("${sr.port}")
+    private int port;
+
+    @Value("${sr.username}")
+    private String username;
+
+    @Value("${sr.password}")
+    private String password;
+
+
+    @Bean
+    public ServiceRegistryAdapter serviceRegistryAdapter() {
+      return new ServiceRegistryRestClient(protocol, hostname, port, username, password);
+    }
+
+
+  }
+
+  @Configuration
   @Profile("production")
   protected static class Production {
     @Bean
@@ -152,6 +181,11 @@ public class Application extends WebMvcConfigurerAdapter {
       return new InMemoryMail();
     }
 
+    @Bean
+    public ServiceRegistryAdapter serviceRegistryAdapter() {
+      return new ServiceRegistryStub();
+    }
+
   }
 
   @Configuration
@@ -164,11 +198,6 @@ public class Application extends WebMvcConfigurerAdapter {
       filterRegistrationBean.setFilter(new MockShibbolethFilter());
       filterRegistrationBean.addUrlPatterns("/*");
       return filterRegistrationBean;
-    }
-
-    @Bean
-    public ServiceRegistryAdapter serviceRegistryAdapter() {
-      return new ServiceRegistryStub();
     }
 
   }
