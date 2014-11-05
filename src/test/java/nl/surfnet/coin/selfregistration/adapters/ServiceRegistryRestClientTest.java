@@ -62,7 +62,6 @@ public class ServiceRegistryRestClientTest {
 
   private ServiceRegistryRestClient subject;
 
-
   @Before
   public void setUp() throws Exception {
     server = new LocalTestServer(null, null);
@@ -74,6 +73,7 @@ public class ServiceRegistryRestClientTest {
     serviceProvider.getOauthSettings().setSecret("secret key");
     serviceProvider.getOauthSettings().setConsumerKey("consumer key");
     subject = new ServiceRegistryRestClient(
+      "http",
       server.getServiceAddress().getHostName(),
       server.getServiceAddress().getPort(),
       USERNAME,
