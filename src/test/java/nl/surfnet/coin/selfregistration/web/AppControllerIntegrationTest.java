@@ -137,7 +137,15 @@ public class AppControllerIntegrationTest {
       );
   }
 
-
+  @Test
+  public void testDisplaysThankYouPage() throws Exception {
+    this.mockMvc
+      .perform(
+        get("/service-provider/thanks")
+      )
+      .andExpect(view().name("thanks"));
+  }
+  
 }
 
 

@@ -65,4 +65,9 @@ public class AppController extends BaseController {
     return "redirect:/service-provider/thanks";
   }
 
+  @RequestMapping(value = "/thanks", method = GET)
+  public ModelAndView thanks() {
+    return new ModelAndView("thanks");
+  }
+
 }
