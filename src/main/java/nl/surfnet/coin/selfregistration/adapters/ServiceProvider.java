@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class ServiceProvider {
   private final StokerEntry stokerEntry;
-  private OauthSettings oauthSettings;
+  private OauthSettings oauthSettings = new OauthSettings();
 
   public ServiceProvider(StokerEntry stokerEntry) {
     this.stokerEntry = stokerEntry;
@@ -46,5 +46,9 @@ public class ServiceProvider {
 
   public Collection<ContactPerson> getContactPersons() {
     return stokerEntry.getContactPersons();
+  }
+
+  public OauthSettings getOauthSettings() {
+    return oauthSettings;
   }
 }

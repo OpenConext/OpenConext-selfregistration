@@ -23,7 +23,8 @@ public class ServiceProviderToServiceRegistryEntryTest {
   @Before
   public void setUp() throws Exception {
     stokerEntry = StokerEntryFactory.stokerEntry(new ClassPathResource("/adapters/metadata.index.json"), SP_ENTITY_ID);
-    actual = ServiceProviderToServiceRegistryEntry.convert(ServiceProvider.from(stokerEntry));
+    ServiceProvider serviceProvider = ServiceProviderFactory.from(stokerEntry);
+    actual = ServiceProviderToServiceRegistryEntry.convert(serviceProvider);
   }
 
   @Test
