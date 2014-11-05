@@ -8,8 +8,6 @@ import org.apache.http.client.fluent.Request;
 import org.apache.http.entity.StringEntity;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.util.Objects;
 
 public class ServiceRegistryRestClient implements ServiceRegistryAdapter {
   private final String hostname;

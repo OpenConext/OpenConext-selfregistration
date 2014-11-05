@@ -1,7 +1,6 @@
 package nl.surfnet.coin.selfregistration.web;
 
 import nl.surfnet.coin.selfregistration.Application;
-import nl.surfnet.coin.selfregistration.adapters.ServiceRegistryAdapter;
 import nl.surfnet.coin.selfregistration.invite.Invitation;
 import nl.surfnet.coin.selfregistration.invite.InviteDao;
 import org.junit.After;
@@ -27,7 +26,6 @@ import java.net.URLEncoder;
 
 import static nl.surfnet.coin.selfregistration.web.TestInstances.*;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -145,7 +143,7 @@ public class AppControllerIntegrationTest {
       )
       .andExpect(view().name("thanks"));
   }
-  
+
 }
 
 
