@@ -27,7 +27,7 @@
           </thead>
           <tbody>
             <tr th:each="contactPerson : ${serviceProvider.contactPersons}">
-              <td th:text="${contactPerson.fullName}">
+              <td th:text="${contactPerson.displayName}">
 
               </td>
               <td th:text="${contactPerson.emailAddress}">
