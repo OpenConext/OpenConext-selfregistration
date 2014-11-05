@@ -2,6 +2,7 @@ package nl.surfnet.coin.selfregistration.adapters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.*;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.localserver.BasicAuthTokenExtractor;
 import org.apache.http.localserver.LocalTestServer;
 import org.apache.http.protocol.HttpContext;
@@ -23,6 +24,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsMapContaining.hasKey;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class ServiceRegistryRestClientTest {
   // in file 64db397e6f93619687d294bed6639c29.xml
@@ -38,6 +40,8 @@ public class ServiceRegistryRestClientTest {
     public HttpResponse httpResponse;
     public HttpContext httpContext;
     public String body = "";
+    public int wantedResponseCode = 201;
+    public String wantedResponseContent = "";
 
     @Override
     public void handle(HttpRequest httpRequest, HttpResponse httpResponse, HttpContext httpContext) throws HttpException, IOException {
@@ -53,6 +57,8 @@ public class ServiceRegistryRestClientTest {
           throw new RuntimeException(e);
         }
       }
+      this.httpResponse.setStatusCode(wantedResponseCode);
+      this.httpResponse.setEntity(new StringEntity(wantedResponseContent));
     }
   }
 
@@ -79,7 +85,7 @@ public class ServiceRegistryRestClientTest {
       USERNAME,
       PASSWORD
     );
-    subject.postConnection(serviceProvider);
+
   }
 
   @After
@@ -89,30 +95,40 @@ public class ServiceRegistryRestClientTest {
 
   @Test
   public void testBasicAuthenticationPresent() throws Exception {
+    subject.postConnection(serviceProvider);
+
     assertTrue(spyHandler.httpRequest.containsHeader("Authorization"));
     assertEquals(format("%s:%s", USERNAME, PASSWORD), new BasicAuthTokenExtractor().extract(spyHandler.httpRequest));
   }
 
   @Test
   public void testJsonBodyHasName() throws Exception {
+    subject.postConnection(serviceProvider);
+
     assertThat(body(), hasKey("name"));
     assertEquals(SP_ENTITY_ID, body().get("name"));
   }
 
   @Test
   public void testJsonBodyHasType() throws Exception {
+    subject.postConnection(serviceProvider);
+
     assertThat(body(), hasKey("type"));
     assertEquals("saml20-sp", body().get("type"));
   }
 
   @Test
   public void testJsonBodyHasState() throws Exception {
+    subject.postConnection(serviceProvider);
+
     assertThat(body(), hasKey("state"));
     assertEquals("testaccepted", body().get("state"));
   }
 
   @Test
   public void testJsonBodyHasContactPersons() throws Exception {
+    subject.postConnection(serviceProvider);
+
     assertThat(body(), hasKey("metadata"));
     Map<String, ?> items = getItemsFromBody();
     List<Map<String, ?>> contacts = getAsListOfMaps("contacts", items);
@@ -121,12 +137,16 @@ public class ServiceRegistryRestClientTest {
 
   @Test
   public void testJsonBodyHasNameIDFormats() throws Exception {
+    subject.postConnection(serviceProvider);
+
     List<String> nameIDFormats = getAsListOfStrings("NameIDFormat", getItemsFromBody());
     assertEquals(3, nameIDFormats.size());
   }
 
   @Test
   public void testJsonBodyHasOauthCallbackUrl() throws Exception {
+    subject.postConnection(serviceProvider);
+
     Map<String, ?> coin = getCoinMap();
     assertThat(coin, hasKey("gadgetbaseurl"));
     assertEquals(serviceProvider.getOauthSettings().getCallbackUrl(), coin.get("gadgetbaseurl"));
@@ -134,6 +154,8 @@ public class ServiceRegistryRestClientTest {
 
   @Test
   public void testJsonBodyHasOauthKeyAndSecret() throws Exception {
+    subject.postConnection(serviceProvider);
+
     Map<String, ?> coin = getCoinMap();
     Map<String, ?> oauth = getAsMap("oauth", coin);
     assertThat(oauth, hasKey(serviceProvider.getOauthSettings().getConsumerKey()));
@@ -141,6 +163,20 @@ public class ServiceRegistryRestClientTest {
       serviceProvider.getOauthSettings().getSecret(),
       oauth.get(serviceProvider.getOauthSettings().getConsumerKey())
     );
+  }
+
+  @Test
+  public void testThrowsExceptionWhenStatusIsNot201() throws Exception {
+    spyHandler.wantedResponseCode = 500;
+    spyHandler.wantedResponseContent = "Breaking Bad";
+
+    try {
+      subject.postConnection(serviceProvider);
+      fail("Expected ServiceRegistryRestClientException");
+    } catch(ServiceRegistryRestClientException e) {
+      assertEquals(spyHandler.wantedResponseCode, e.getStatusCode());
+      assertEquals(spyHandler.wantedResponseContent, e.getMessage());
+    }
   }
 
   private Map<String, ?> getCoinMap() throws IOException {
