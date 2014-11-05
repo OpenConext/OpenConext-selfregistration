@@ -15,6 +15,7 @@ public class Metadata {
   public static final String ASSERTION_CONSUMER_SERVICE = "AssertionConsumerService";
   public static final String NAME_ID_FORMAT = "NameIDFormat";
   public static final String CONTACTS = "contacts";
+
   private Map<String, Object> items = new HashMap<>();
 
   public Collection<Map<String, String>> assertionConsumerService() {
@@ -52,6 +53,24 @@ public class Metadata {
         );
       }
     }));
+    return this;
+  }
+
+  /*
+   * Needed for json parsing. ObjectMapper expects public getters.
+   */
+  public Map<String, Object> getItems() {
+    return items;
+  }
+
+  public Metadata coin(OauthSettings oauthSettings) {
+    items.put("coin", ImmutableMap.of(
+        "gadgetbaseurl", oauthSettings.getCallbackUrl(),
+        "oauth", ImmutableMap.of(
+          oauthSettings.getConsumerKey(), oauthSettings.getSecret()
+        )
+      )
+    );
     return this;
   }
 }

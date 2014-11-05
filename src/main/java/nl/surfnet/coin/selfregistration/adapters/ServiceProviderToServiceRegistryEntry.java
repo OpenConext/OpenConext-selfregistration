@@ -17,6 +17,7 @@ public class ServiceProviderToServiceRegistryEntry {
     metadata.assertionConsumerServices(serviceProvider.getAssertionConsumerServices());
     metadata.nameIdFormats(serviceProvider.getNameIdFormats());
     metadata.contactPersons(serviceProvider.getContactPersons());
+    metadata.coin(serviceProvider.getOauthSettings());
     return serviceRegistryEntry;
   }
 }

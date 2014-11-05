@@ -14,6 +14,7 @@ import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static java.lang.String.format;
@@ -69,13 +70,15 @@ public class ServiceRegistryRestClientTest {
     server.register("/*", spyHandler);
     server.start();
     serviceProvider = new ServiceProvider(stokerEntry(new ClassPathResource("/adapters/metadata.index.json"), SP_ENTITY_ID));
+    serviceProvider.getOauthSettings().setCallbackUrl("http://callback");
+    serviceProvider.getOauthSettings().setSecret("secret key");
+    serviceProvider.getOauthSettings().setConsumerKey("consumer key");
     subject = new ServiceRegistryRestClient(
       server.getServiceAddress().getHostName(),
       server.getServiceAddress().getPort(),
       USERNAME,
       PASSWORD
     );
-
     subject.postConnection(serviceProvider);
   }
 
@@ -108,7 +111,61 @@ public class ServiceRegistryRestClientTest {
     assertEquals("testaccepted", body().get("state"));
   }
 
+  @Test
+  public void testJsonBodyHasContactPersons() throws Exception {
+    assertThat(body(), hasKey("metadata"));
+    Map<String, ?> items = getItemsFromBody();
+    List<Map<String, ?>> contacts = getAsListOfMaps("contacts", items);
+    assertEquals(2, contacts.size());
+  }
+
+  @Test
+  public void testJsonBodyHasNameIDFormats() throws Exception {
+    List<String> nameIDFormats = getAsListOfStrings("NameIDFormat", getItemsFromBody());
+    assertEquals(3, nameIDFormats.size());
+  }
+
+  @Test
+  public void testJsonBodyHasOauthCallbackUrl() throws Exception {
+    Map<String, ?> coin = getCoinMap();
+    assertThat(coin, hasKey("gadgetbaseurl"));
+    assertEquals(serviceProvider.getOauthSettings().getCallbackUrl(), coin.get("gadgetbaseurl"));
+  }
+
+  @Test
+  public void testJsonBodyHasOauthKeyAndSecret() throws Exception {
+    Map<String, ?> coin = getCoinMap();
+    Map<String, ?> oauth = getAsMap("oauth", coin);
+    assertThat(oauth, hasKey(serviceProvider.getOauthSettings().getConsumerKey()));
+    assertEquals(
+      serviceProvider.getOauthSettings().getSecret(),
+      oauth.get(serviceProvider.getOauthSettings().getConsumerKey())
+    );
+  }
+
+  private Map<String, ?> getCoinMap() throws IOException {
+    Map<String, ?> items = getItemsFromBody();
+    return getAsMap("coin", items);
+  }
+
+  private Map<String, ?> getItemsFromBody() throws IOException {
+    Map<String, ?> metadata = getAsMap("metadata", body());
+    return getAsMap("items", metadata);
+  }
+
   private Map<String, ?> body() throws IOException {
     return new ObjectMapper().readValue(spyHandler.body, HashMap.class);
+  }
+
+  private Map<String, ?> getAsMap(String key, Map<String, ?> from) {
+    return (Map<String, ?>) from.get(key);
+  }
+
+  private List<String> getAsListOfStrings(String key, Map<String, ?> from) {
+    return (List<String>) from.get(key);
+  }
+
+  private List<Map<String, ?>> getAsListOfMaps(String key, Map<String, ?> from) {
+    return (List<Map<String, ?>>) from.get(key);
   }
 }

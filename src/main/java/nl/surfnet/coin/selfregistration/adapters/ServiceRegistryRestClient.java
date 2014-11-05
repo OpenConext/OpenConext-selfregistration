@@ -40,7 +40,9 @@ public class ServiceRegistryRestClient implements ServiceRegistryAdapter {
             .Post(serverUrl + "/api/connections.json")
             .body(
               new StringEntity(
-                objectMapper.writeValueAsString(ServiceProviderToServiceRegistryEntry.convert(serviceProvider))
+                objectMapper.writeValueAsString(
+                  ServiceProviderToServiceRegistryEntry.convert(serviceProvider)
+                )
               )
             )
         );
