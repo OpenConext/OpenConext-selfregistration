@@ -24,8 +24,7 @@ public class ServiceProviderToServiceRegistryEntryTest {
   @Before
   public void setUp() throws Exception {
     subject = new ServiceProviderToServiceRegistryEntry();
-    Stoker stoker = new Stoker(new ClassPathResource("/adapters/metadata.index.json"), new ClassPathResource("/stoker/"));
-    stokerEntry = stoker.getEduGainServiceProvider(SP_ENTITY_ID);
+    stokerEntry = StokerEntryFactory.stokerEntry(new ClassPathResource("/adapters/metadata.index.json"), SP_ENTITY_ID);
     actual = subject.convert(ServiceProvider.from(stokerEntry));
   }
 
