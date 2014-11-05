@@ -130,12 +130,14 @@ public class AppControllerIntegrationTest {
         model().hasNoErrors()
       )
       .andExpect(
-        status().is3xxRedirection()
+        redirectedUrl("/service-provider/thanks")
       )
       .andExpect(
         flash().attribute("flash.notice", is("Service created"))
       );
   }
+
+
 }
 
 

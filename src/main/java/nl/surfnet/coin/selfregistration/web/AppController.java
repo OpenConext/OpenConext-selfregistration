@@ -62,6 +62,7 @@ public class AppController extends BaseController {
     } else {
       notice(redirectAttributes, "serviceProvider.notExist", invitation.get().getSpEntityId());
     }
-    return "redirect:/";
+    return "redirect:/service-provider/thanks";
   }
+
 }
