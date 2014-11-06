@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
-public class AppControllerIntegrationTest {
+public class ServiceProviderControllerIntegrationTest {
 
   // in file 64db397e6f93619687d294bed6639c29.xml
   public static final String SP_ENTITY_ID = "http://saml.ps-ui-test.qalab.geant.net";
@@ -44,7 +44,7 @@ public class AppControllerIntegrationTest {
   private String CSRF_TOKEN_SESSION_NAME = HttpSessionCsrfTokenRepository.class.getName().concat(".CSRF_TOKEN");
 
   @Autowired
-  AppController appController;
+  ServiceProviderController serviceProviderController;
 
   private MockMvc mockMvc;
 

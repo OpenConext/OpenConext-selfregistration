@@ -21,13 +21,13 @@ import static org.hamcrest.collection.IsMapContaining.hasKey;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
-public class AppControllerTest {
+public class ServiceProviderControllerTest {
 
 
   public static final String ACCEPTED_INVITE_ID = "accepted_invite_id";
   public static final String INVITE_ID = "invite_id";
   @InjectMocks
-  private AppController appController;
+  private ServiceProviderController serviceProviderController;
 
   @Mock
   private InviteService inviteService;
@@ -43,7 +43,7 @@ public class AppControllerTest {
 
   @Before
   public void setUp() throws Exception {
-    appController = new AppController();
+    serviceProviderController = new ServiceProviderController();
     MockitoAnnotations.initMocks(this);
     redirectAttributes = new RedirectAttributesModelMap();
     acceptedInvitation = new Invitation("entityId", "foo@localhost.nl");
@@ -58,7 +58,7 @@ public class AppControllerTest {
   public void testFailsWhenInvitationIdDoesNotExist() throws Exception {
     when(inviteService.get("not exists")).thenReturn(Optional.<Invitation>fromNullable(null));
 
-    ModelAndView modelAndView = appController.home(oauthSettings, "not exists", redirectAttributes);
+    ModelAndView modelAndView = serviceProviderController.home(oauthSettings, "not exists", redirectAttributes);
 
     assertEquals("404", modelAndView.getViewName());
   }
@@ -68,7 +68,7 @@ public class AppControllerTest {
     when(inviteService.get(ACCEPTED_INVITE_ID)).thenReturn(Optional.of(acceptedInvitation));
     when(messageSource.getMessage("invite.already_added", new Object[]{}, Locale.ENGLISH)).thenReturn("foobar");
 
-    ModelAndView modelAndView = appController.home(oauthSettings, ACCEPTED_INVITE_ID, redirectAttributes);
+    ModelAndView modelAndView = serviceProviderController.home(oauthSettings, ACCEPTED_INVITE_ID, redirectAttributes);
 
     assertEquals(redirectAttributes.getFlashAttributes().get("flash.notice"), "foobar");
     assertEquals("new", modelAndView.getViewName());
@@ -78,7 +78,7 @@ public class AppControllerTest {
   public void testDisplaysTheFormWhenAnInvitationExistsAndNotYetAccepted() throws Exception {
     when(inviteService.get(INVITE_ID)).thenReturn(Optional.of(invitation));
 
-    ModelAndView modelAndView = appController.home(oauthSettings, INVITE_ID, redirectAttributes);
+    ModelAndView modelAndView = serviceProviderController.home(oauthSettings, INVITE_ID, redirectAttributes);
     assertThat(redirectAttributes.getFlashAttributes(), not(hasKey("flash.notice")));
     assertEquals("new", modelAndView.getViewName());
   }

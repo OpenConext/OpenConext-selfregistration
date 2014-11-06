@@ -23,7 +23,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
 @RequestMapping("/service-provider")
-public class AppController extends BaseController {
+public class ServiceProviderController extends BaseController {
 
   @Autowired
   private InviteService inviteService;
