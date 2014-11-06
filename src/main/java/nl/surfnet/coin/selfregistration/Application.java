@@ -10,7 +10,7 @@ import nl.surfnet.coin.selfregistration.invite.InviteService;
 import nl.surfnet.coin.selfregistration.mock.InMemoryMail;
 import nl.surfnet.coin.selfregistration.mock.LetterOpener;
 import nl.surfnet.coin.selfregistration.mock.MockShibbolethFilter;
-import nl.surfnet.coin.selfregistration.mock.ServiceRegistryStub;
+import nl.surfnet.coin.selfregistration.mock.ServiceRegistryMock;
 import nl.surfnet.coin.selfregistration.web.shibboleth.ShibbolethPreAuthenticatedProcessingFilter;
 import nl.surfnet.coin.selfregistration.web.shibboleth.ShibbolethUserDetailService;
 import nl.surfnet.coin.stoker.Stoker;
@@ -183,7 +183,7 @@ public class Application extends WebMvcConfigurerAdapter {
 
     @Bean
     public ServiceRegistryAdapter serviceRegistryAdapter() {
-      return new ServiceRegistryStub();
+      return new ServiceRegistryMock();
     }
 
   }
