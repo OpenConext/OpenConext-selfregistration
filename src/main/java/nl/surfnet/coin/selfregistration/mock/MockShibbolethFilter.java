@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.*;
 import java.io.IOException;
 
-public class    MockShibbolethFilter implements Filter {
+public class MockShibbolethFilter implements Filter {
 
   private static final Logger LOG = LoggerFactory.getLogger(MockShibbolethFilter.class);
 
