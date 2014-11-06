@@ -1,8 +1,11 @@
 package nl.surfnet.coin.selfregistration.web;
 
 import nl.surfnet.coin.selfregistration.Application;
+import nl.surfnet.coin.selfregistration.adapters.ServiceProvider;
+import nl.surfnet.coin.selfregistration.adapters.ServiceRegistryRestClientException;
 import nl.surfnet.coin.selfregistration.invite.Invitation;
 import nl.surfnet.coin.selfregistration.invite.InviteDao;
+import nl.surfnet.coin.selfregistration.mock.ServiceRegistryMock;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,6 +21,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -60,6 +64,9 @@ public class ServiceProviderControllerIntegrationTest {
   @Autowired
   InviteDao inviteDao;
 
+  @Autowired
+  ServiceRegistryMock serviceRegistryAdapter;
+
   private JdbcTemplate jdbcTemplate;
 
 
@@ -74,6 +81,7 @@ public class ServiceProviderControllerIntegrationTest {
 
   @After
   public void tearDown() throws Exception {
+    this.serviceRegistryAdapter.reset();
     SecurityContextHolder.clearContext();
     jdbcTemplate.update("delete from invitations");
   }
@@ -112,18 +120,8 @@ public class ServiceProviderControllerIntegrationTest {
 
   @Test
   public void testPostNewServiceProviderSuccess() throws Exception {
-    Invitation invitation = newInvitation(SP_ENTITY_ID);
-    inviteDao.persist(invitation);
 
-    this.mockMvc
-      .perform(
-        post("/service-provider/" + URLEncoder.encode(invitation.getUuid(), "UTF-8"))
-          .param(CSRF_TOKEN_PARAM_NAME, TOKEN_STRING)
-          .param("callbackUrl", validOauthSettings().getCallbackUrl())
-          .param("secret", validOauthSettings().getSecret())
-          .param("consumerKey", validOauthSettings().getConsumerKey())
-          .sessionAttr(CSRF_TOKEN_SESSION_NAME, new DefaultCsrfToken(CSRF_TOKEN_SESSION_NAME, CSRF_TOKEN_PARAM_NAME, TOKEN_STRING))
-      )
+    postValidOauthSettings()
       .andExpect(
         model().hasNoErrors()
       )
@@ -136,12 +134,61 @@ public class ServiceProviderControllerIntegrationTest {
   }
 
   @Test
+  public void testDisplaysErrorPageWhenCallToServiceRegistryWithServiceRegistryRestClientException() throws Exception {
+
+    throwExceptionOnPostConnection(new ServiceRegistryRestClientException("foo", 404));
+
+    postValidOauthSettings()
+      .andExpect(view().name("error"));
+
+  }
+
+  @Test
+  public void testDisplaysErrorPageWhenCallToServiceRegistryWithRuntimeException() throws Exception {
+
+    throwExceptionOnPostConnection(new RuntimeException("foo"));
+
+    postValidOauthSettings()
+      .andExpect(view().name("error"));
+
+  }
+
+  @Test
   public void testDisplaysThankYouPage() throws Exception {
     this.mockMvc
       .perform(
         get("/service-provider/thanks")
       )
       .andExpect(view().name("thanks"));
+  }
+
+  private ResultActions postValidOauthSettings() throws Exception {
+    Invitation invitation = persistInvitation();
+    return this.mockMvc
+      .perform(
+        post("/service-provider/" + URLEncoder.encode(invitation.getUuid(), "UTF-8"))
+          .param(CSRF_TOKEN_PARAM_NAME, TOKEN_STRING)
+          .param("callbackUrl", validOauthSettings().getCallbackUrl())
+          .param("secret", validOauthSettings().getSecret())
+          .param("consumerKey", validOauthSettings().getConsumerKey())
+          .sessionAttr(CSRF_TOKEN_SESSION_NAME, new DefaultCsrfToken(CSRF_TOKEN_SESSION_NAME, CSRF_TOKEN_PARAM_NAME, TOKEN_STRING))
+      );
+  }
+
+
+  private Invitation persistInvitation() {
+    Invitation invitation = newInvitation(SP_ENTITY_ID);
+    inviteDao.persist(invitation);
+    return invitation;
+  }
+
+  private void throwExceptionOnPostConnection(final RuntimeException exception) {
+    serviceRegistryAdapter.mocker = new ServiceRegistryMock.Mocker() {
+      @Override
+      public void execute(ServiceProvider serviceProvider) {
+        throw exception;
+      }
+    };
   }
 
 }
