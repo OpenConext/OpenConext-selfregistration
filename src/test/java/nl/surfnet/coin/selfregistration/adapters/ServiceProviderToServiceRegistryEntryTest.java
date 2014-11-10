@@ -1,14 +1,11 @@
 package nl.surfnet.coin.selfregistration.adapters;
 
-import nl.surfnet.coin.stoker.ContactPerson;
-import nl.surfnet.coin.stoker.Stoker;
 import nl.surfnet.coin.stoker.StokerEntry;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.*;
@@ -44,19 +41,19 @@ public class ServiceProviderToServiceRegistryEntryTest {
 
   @Test
   public void testHasCorrectAssertionConsumerServices() throws Exception {
-    Collection<Map<String, String>> result = metadata().assertionConsumerService();
+    Collection<Map<String, String>> result = metadata().getAssertionConsumerService();
     assertEquals(2, result.size());
   }
 
   @Test
   public void testHasCorrectNameIDFormats() throws Exception {
-    Collection<String> result = metadata().nameIdFormats();
+    Collection<String> result = metadata().getNameIdFormats();
     assertEquals(3, result.size());
   }
 
   @Test
   public void testHasCorrectContactPersons() throws Exception {
-    Collection<Map<String, String>> result = metadata().contactPersons();
+    Collection<Map<String, String>> result = metadata().getContactPersons();
     assertEquals(2, result.size());
   }
 

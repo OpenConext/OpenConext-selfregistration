@@ -130,8 +130,7 @@ public class ServiceRegistryRestClientTest {
     subject.postConnection(serviceProvider);
 
     assertThat(body(), hasKey("metadata"));
-    Map<String, ?> items = getItemsFromBody();
-    List<Map<String, ?>> contacts = getAsListOfMaps("contacts", items);
+    List<Map<String, ?>> contacts = getAsListOfMaps("contacts", getMetadata());
     assertEquals(2, contacts.size());
   }
 
@@ -139,7 +138,7 @@ public class ServiceRegistryRestClientTest {
   public void testJsonBodyHasNameIDFormats() throws Exception {
     subject.postConnection(serviceProvider);
 
-    List<String> nameIDFormats = getAsListOfStrings("NameIDFormat", getItemsFromBody());
+    List<String> nameIDFormats = getAsListOfStrings("NameIDFormat", getMetadata());
     assertEquals(3, nameIDFormats.size());
   }
 
@@ -179,14 +178,12 @@ public class ServiceRegistryRestClientTest {
     }
   }
 
-  private Map<String, ?> getCoinMap() throws IOException {
-    Map<String, ?> items = getItemsFromBody();
-    return getAsMap("coin", items);
+  private Map<String, ?> getMetadata() throws IOException {
+    return getAsMap("metadata", body());
   }
 
-  private Map<String, ?> getItemsFromBody() throws IOException {
-    Map<String, ?> metadata = getAsMap("metadata", body());
-    return getAsMap("items", metadata);
+  private Map<String, ?> getCoinMap() throws IOException {
+    return getAsMap("coin", getMetadata());
   }
 
   private Map<String, ?> body() throws IOException {
