@@ -14,7 +14,7 @@ import java.util.*;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Metadata {
   public static final String ASSERTION_CONSUMER_SERVICE = "AssertionConsumerService";
-  public static final String NAME_ID_FORMAT = "NameIDFormat";
+  public static final String NAME_ID_FORMAT = "NameIDFormats";
   public static final String CONTACTS = "contacts";
   public static final String COIN = "coin";
 
@@ -64,9 +64,10 @@ public class Metadata {
 
   public Metadata coin(OauthSettings oauthSettings) {
     metadata.put("coin", ImmutableMap.of(
-        "gadgetbaseurl", oauthSettings.getCallbackUrl(),
+        "gadgetbaseurl", oauthSettings.getConsumerKey(),
         "oauth", ImmutableMap.of(
-          oauthSettings.getConsumerKey(), oauthSettings.getSecret()
+          "secret", oauthSettings.getSecret(),
+          "callback_url", oauthSettings.getCallbackUrl()
         )
       )
     );

@@ -138,17 +138,17 @@ public class ServiceRegistryRestClientTest {
   public void testJsonBodyHasNameIDFormats() throws Exception {
     subject.postConnection(serviceProvider);
 
-    List<String> nameIDFormats = getAsListOfStrings("NameIDFormat", getMetadata());
+    List<String> nameIDFormats = getAsListOfStrings("NameIDFormats", getMetadata());
     assertEquals(3, nameIDFormats.size());
   }
 
   @Test
-  public void testJsonBodyHasOauthCallbackUrl() throws Exception {
+  public void testJsonBodyHasOauthKey() throws Exception {
     subject.postConnection(serviceProvider);
 
     Map<String, ?> coin = getCoinMap();
     assertThat(coin, hasKey("gadgetbaseurl"));
-    assertEquals(serviceProvider.getOauthSettings().getCallbackUrl(), coin.get("gadgetbaseurl"));
+    assertEquals(serviceProvider.getOauthSettings().getConsumerKey(), coin.get("gadgetbaseurl"));
   }
 
   @Test
@@ -157,10 +157,15 @@ public class ServiceRegistryRestClientTest {
 
     Map<String, ?> coin = getCoinMap();
     Map<String, ?> oauth = getAsMap("oauth", coin);
-    assertThat(oauth, hasKey(serviceProvider.getOauthSettings().getConsumerKey()));
+    assertThat(oauth, hasKey("secret"));
+    assertThat(oauth, hasKey("callback_url"));
     assertEquals(
       serviceProvider.getOauthSettings().getSecret(),
-      oauth.get(serviceProvider.getOauthSettings().getConsumerKey())
+      oauth.get("secret")
+    );
+    assertEquals(
+      serviceProvider.getOauthSettings().getCallbackUrl(),
+      oauth.get("callback_url")
     );
   }
 
