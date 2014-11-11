@@ -13,6 +13,7 @@ public class ServiceProviderToServiceRegistryEntry {
     serviceRegistryEntry.setName(serviceProvider.getEntityId());
     serviceRegistryEntry.setState(INITIAL_STATE);
     serviceRegistryEntry.setType(TYPE_SP);
+    serviceRegistryEntry.setRevisionNote("Created by selfregistration");
     Metadata metadata = serviceRegistryEntry.getMetadata();
     metadata.assertionConsumerServices(serviceProvider.getAssertionConsumerServices());
     metadata.nameIdFormats(serviceProvider.getNameIdFormats());

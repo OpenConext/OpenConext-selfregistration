@@ -57,6 +57,11 @@ public class ServiceProviderToServiceRegistryEntryTest {
     assertEquals(2, result.size());
   }
 
+  @Test
+  public void testMustHaveARevisionNote() throws Exception {
+    assertNotNull(actual.getRevisionNote());
+  }
+
   private Metadata metadata() {
     return actual.getMetadata();
   }
