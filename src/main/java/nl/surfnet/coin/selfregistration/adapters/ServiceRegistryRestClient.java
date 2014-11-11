@@ -47,6 +47,7 @@ public class ServiceRegistryRestClient implements ServiceRegistryAdapter {
           Request
             .Post(serverUrl + "/janus/app.php/api/connections.json")
             .addHeader("Authorization", "Basic " + basicAuth)
+            .addHeader("Content-Type", "application/json")
             .body(new StringEntity(jsonBody))
         )
         .returnResponse();
