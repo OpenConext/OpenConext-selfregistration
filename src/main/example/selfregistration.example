@@ -1,0 +1,106 @@
+#!/bin/bash
+#
+# Startup script for a spring-boot powered application
+#
+# chkconfig: - 84 16
+# description: eduTeams selfregistration
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+[ -z "$JAVA_HOME" -a -x /etc/profile.d/java.sh ] && . /etc/profile.d/java.sh
+
+#######################################
+# START configurable per environment
+#######################################
+APPLICATION_HOME=/opt/selfregistration
+APP_NAME=selfregistration
+APP_JAR="$APPLICATION_HOME/$APP_NAME.jar"
+APP_ENV=production
+LOG="/var/log/$APP_NAME.log"
+LOCK="/var/lock/subsys/$APP_NAME"
+#######################################
+# END configurable per environment
+#######################################
+
+export APPLICATION_HOME
+
+RETVAL=0
+
+pid_of_app() {
+    pgrep -f "java.*$APP_NAME"
+}
+
+start() {
+    [ -e "$LOG" ] && cnt=`wc -l "$LOG" | awk '{ print $1 }'` || cnt=1
+
+    echo -n $"Starting $APP_NAME: "
+
+    cd "$APPLICATION_HOME"
+    nohup java -jar "$APP_JAR" --spring.profiles.active="$APP_ENV" >> "$LOG" 2>&1 &
+
+    while { pid_of_app > /dev/null ; } &&
+        ! { tail +$cnt "$LOG" | grep -q 'Started Application' ; } ; do
+        sleep 1
+    done
+
+    pid_of_app > /dev/null
+    RETVAL=$?
+    [ $RETVAL = 0 ] && success $"$STRING" || failure $"$STRING"
+    echo
+
+    [ $RETVAL = 0 ] && touch "$LOCK"
+}
+
+stop() {
+    echo -n "Stopping $APP_NAME: "
+
+    pid=`pid_of_app`
+    [ -n "$pid" ] && kill $pid
+    RETVAL=$?
+    cnt=10
+    while [ $RETVAL = 0 -a $cnt -gt 0 ] &&
+        { pid_of_app > /dev/null ; } ; do
+            sleep 1
+            ((cnt--))
+    done
+
+    [ $RETVAL = 0 ] && rm -f "$LOCK"
+    [ $RETVAL = 0 ] && success $"$STRING" || failure $"$STRING"
+    echo
+}
+
+status() {
+    pid=`pid_of_app`
+    if [ -n "$pid" ]; then
+        echo "$APP_NAME (pid $pid) is running..."
+        return 0
+    fi
+    if [ -f "$LOCK" ]; then
+        echo $"${base} dead but subsys locked"
+        return 2
+    fi
+    echo "$APP_NAME is stopped"
+    return 3
+}
+
+# See how we were called.
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    status)
+        status
+        ;;
+    restart)
+        stop
+        start
+        ;;
+    *)
+        echo $"Usage: $0 {start|stop|restart|status}"
+        exit 1
+esac
+
+exit $RETVAL
