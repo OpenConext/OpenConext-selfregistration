@@ -39,7 +39,7 @@ start() {
     nohup java -jar "$APP_JAR" --spring.profiles.active="$APP_ENV" >> "$LOG" 2>&1 &
 
     while { pid_of_app > /dev/null ; } &&
-        ! { tail +$cnt "$LOG" | grep -q 'Started Application' ; } ; do
+        ! { tail -n+$cnt "$LOG" | grep -q 'Started Application' ; } ; do
         sleep 1
     done
 
