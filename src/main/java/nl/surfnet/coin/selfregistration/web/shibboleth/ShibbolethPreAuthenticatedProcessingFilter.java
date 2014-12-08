@@ -18,8 +18,7 @@ public class ShibbolethPreAuthenticatedProcessingFilter extends AbstractPreAuthe
       LOG.info("Found user with uid {}", uid.get());
       final String displayName = (String) request.getAttribute(ShibbolethRequestAttributes.DISPLAY_NAME.getAttributeName());
       final String email = (String) request.getAttribute(ShibbolethRequestAttributes.EMAIL.getAttributeName());
-      final String idpId = (String) request.getAttribute(ShibbolethRequestAttributes.IDP_ID.getAttributeName());
-      return new ShibbolethPrincipal(uid.get(), displayName, email, idpId);
+      return new ShibbolethPrincipal(uid.get(), displayName, email);
     } else {
       LOG.info("No principal found. This should trigger shibboleth.");
       return null;

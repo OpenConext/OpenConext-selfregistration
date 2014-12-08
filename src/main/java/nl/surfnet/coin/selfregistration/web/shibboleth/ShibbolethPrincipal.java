@@ -8,17 +8,11 @@ public class ShibbolethPrincipal {
   private final String uid;
   private final String displayName;
   private final String email;
-  private final String idpId;
 
-  public String getIdpId() {
-    return idpId;
-  }
-
-  public ShibbolethPrincipal(String uid, String displayName, String email, String idpId) {
+  public ShibbolethPrincipal(String uid, String displayName, String email) {
     this.uid = uid;
     this.displayName = displayName;
     this.email = email;
-    this.idpId = idpId;
   }
 
   public String getUid() {
@@ -39,7 +33,6 @@ public class ShibbolethPrincipal {
       "uid='" + uid + '\'' +
       ", displayName='" + displayName + '\'' +
       ", email='" + email + '\'' +
-      ", idpId='" + idpId + '\'' +
       '}';
   }
 }

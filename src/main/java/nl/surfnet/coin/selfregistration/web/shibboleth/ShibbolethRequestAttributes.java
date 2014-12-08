@@ -5,7 +5,7 @@ package nl.surfnet.coin.selfregistration.web.shibboleth;
  */
 public enum ShibbolethRequestAttributes {
 
-  UID("Shib-user"), DISPLAY_NAME("Shib-displayName"), EMAIL("Shib-email"), IDP_ID("Shib-Identity-Provider");
+  UID("uid"), DISPLAY_NAME("displayName"), EMAIL("Shib-InetOrgPerson-mail"), IDP_ID("Shib-Identity-Provider");
 
   private final String attributeName;
 
