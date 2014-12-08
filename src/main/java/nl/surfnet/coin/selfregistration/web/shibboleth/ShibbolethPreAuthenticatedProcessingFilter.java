@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
+import java.util.Enumeration;
 
 public class ShibbolethPreAuthenticatedProcessingFilter extends AbstractPreAuthenticatedProcessingFilter {
 
@@ -21,6 +23,12 @@ public class ShibbolethPreAuthenticatedProcessingFilter extends AbstractPreAuthe
       return new ShibbolethPrincipal(uid.get(), displayName, email);
     } else {
       LOG.info("No principal found. This should trigger shibboleth.");
+      Enumeration<String> attributeNames = request.getAttributeNames();
+      while (attributeNames.hasMoreElements()) {
+        String name = attributeNames.nextElement();
+        LOG.info("Attribute name {} has value {}", name, request.getAttribute(name));
+      }
+
       return null;
     }
   }
