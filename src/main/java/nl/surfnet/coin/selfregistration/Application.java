@@ -137,7 +137,7 @@ public class Application extends WebMvcConfigurerAdapter {
   }
 
   @Configuration
-  @Profile({"dev", "production"})
+  @Profile({"dev", "production", "test"})
   protected static class ProductionAndDev {
 
     @Value("${sr.protocol}")
@@ -174,8 +174,8 @@ public class Application extends WebMvcConfigurerAdapter {
   }
 
   @Configuration
-  @Profile("test")
-  protected static class Test {
+  @Profile("unittest")
+  protected static class UnitTest {
     @Bean
     public JavaMailSender mail() {
       return new InMemoryMail();
@@ -188,9 +188,20 @@ public class Application extends WebMvcConfigurerAdapter {
 
   }
 
+
   @Configuration
-  @Profile({"dev", "test"})
-  protected static class DevelopmentAndTest {
+  @Profile("test")
+  protected static class Test {
+    @Bean
+    public JavaMailSender mail() {
+      return new JavaMailSenderImpl();
+    }
+
+  }
+
+  @Configuration
+  @Profile({"dev", "unittest"})
+  protected static class DevelopmentAndUnitTest {
 
     @Bean
     public FilterRegistrationBean mockShibbolethFilter() {

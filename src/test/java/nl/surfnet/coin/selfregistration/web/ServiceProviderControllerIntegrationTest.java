@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-@ActiveProfiles("test")
+@ActiveProfiles("unittest")
 public class ServiceProviderControllerIntegrationTest {
 
   // in file 64db397e6f93619687d294bed6639c29.xml
