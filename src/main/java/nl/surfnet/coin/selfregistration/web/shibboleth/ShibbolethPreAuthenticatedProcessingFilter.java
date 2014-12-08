@@ -28,6 +28,11 @@ public class ShibbolethPreAuthenticatedProcessingFilter extends AbstractPreAuthe
         String name = attributeNames.nextElement();
         LOG.info("Attribute name {} has value {}", name, request.getAttribute(name));
       }
+      Enumeration<String> headerNames = request.getHeaderNames();
+      while(headerNames.hasMoreElements()) {
+        String name = headerNames.nextElement();
+        LOG.info("Header name {} has value {}", name, request.getHeader(name));
+      }
 
       return null;
     }
