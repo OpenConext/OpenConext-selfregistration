@@ -31,6 +31,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
@@ -114,6 +115,13 @@ public class Application extends WebMvcConfigurerAdapter {
     private static final Logger LOG = LoggerFactory.getLogger(ApplicationSecurity.class);
 
     @Override
+    public void configure(WebSecurity web) throws Exception {
+      web.
+        ignoring()
+        .antMatchers("/css.**");
+    }
+
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
       LOG.info("Configuring application security using {}", authenticationManagerBean().getClass());
       ShibbolethPreAuthenticatedProcessingFilter filter = new ShibbolethPreAuthenticatedProcessingFilter();
@@ -122,6 +130,7 @@ public class Application extends WebMvcConfigurerAdapter {
       http
         .authorizeRequests()
         .antMatchers("/*").permitAll()
+        .antMatchers("/css/**").permitAll()
         .antMatchers("/fedops").hasAnyRole("USER");
       http.csrf();
     }
