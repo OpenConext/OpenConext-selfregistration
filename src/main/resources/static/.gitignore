@@ -1,5 +1,0 @@
-# Ignore everything in this directory
-application.css
-application.css.map
-# Except this file
-!.gitignore
