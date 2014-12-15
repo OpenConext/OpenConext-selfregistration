@@ -118,7 +118,7 @@ public class Application extends WebMvcConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
       web.
         ignoring()
-        .antMatchers("/css.**");
+        .antMatchers("/css/**");
     }
 
     @Override
