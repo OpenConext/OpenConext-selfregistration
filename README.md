@@ -22,7 +22,7 @@ with [rbenv](https://github.com/sstephenson/rbenv). After installing rbenv ```cd
 
     gem install sass
 
-    sass --watch src/main/sass/application.sass:src/main/resources/static/application.css
+    sass --watch src/main/sass/application.sass:src/main/resources/static/css/application.css
 
 ### ServiceRegistry
 
