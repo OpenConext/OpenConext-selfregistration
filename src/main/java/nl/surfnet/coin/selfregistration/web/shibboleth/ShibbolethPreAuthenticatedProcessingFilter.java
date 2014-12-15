@@ -15,19 +15,14 @@ public class ShibbolethPreAuthenticatedProcessingFilter extends AbstractPreAuthe
 
   @Override
   protected Object getPreAuthenticatedPrincipal(final HttpServletRequest request) {
-    final Optional<String> uid = Optional.fromNullable((String) request.getAttribute(ShibbolethRequestAttributes.UID.getAttributeName()));
+    final Optional<String> uid = Optional.fromNullable(request.getHeader(ShibbolethRequestAttributes.UID.getAttributeName()));
     if (uid.isPresent()) {
       LOG.info("Found user with uid {}", uid.get());
-      final String displayName = (String) request.getAttribute(ShibbolethRequestAttributes.DISPLAY_NAME.getAttributeName());
-      final String email = (String) request.getAttribute(ShibbolethRequestAttributes.EMAIL.getAttributeName());
+      final String displayName = request.getHeader(ShibbolethRequestAttributes.DISPLAY_NAME.getAttributeName());
+      final String email = request.getHeader(ShibbolethRequestAttributes.EMAIL.getAttributeName());
       return new ShibbolethPrincipal(uid.get(), displayName, email);
     } else {
-      LOG.info("No principal found. This should trigger shibboleth.");
-      Enumeration<String> attributeNames = request.getAttributeNames();
-      while (attributeNames.hasMoreElements()) {
-        String name = attributeNames.nextElement();
-        LOG.info("Attribute name {} has value {}", name, request.getAttribute(name));
-      }
+      LOG.info("No principal found. This should have been set by shibboleth!");
       Enumeration<String> headerNames = request.getHeaderNames();
       while(headerNames.hasMoreElements()) {
         String name = headerNames.nextElement();
