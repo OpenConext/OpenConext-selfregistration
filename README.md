@@ -24,6 +24,8 @@ with [rbenv](https://github.com/sstephenson/rbenv). After installing rbenv ```cd
 
     sass --watch src/main/sass/application.sass:src/main/resources/static/css/application.css
 
+Goto http://localhost:8080/fedops
+
 ### ServiceRegistry
 
 It uses the API on serviceregistry to add new services. See
